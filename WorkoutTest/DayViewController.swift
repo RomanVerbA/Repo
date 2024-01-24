@@ -12,7 +12,7 @@ class DayViewController: UIViewController {
   var tableView = UITableView .init()
   
   var program: Program?
-  let cells = 2
+  let addCells = 2
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -46,32 +46,29 @@ class DayViewController: UIViewController {
 
 extension DayViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return cells + (program?.days.count)!
+    return addCells + (program?.days.count)!
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
     if indexPath.row == 0 {
-      
-      let cell = tableView.dequeueReusableCell(withIdentifier: "imageCell", for: indexPath) as! ImageCell
-      cell.setupImage(with: "1")
-      return cell
+      let imageCell = tableView.dequeueReusableCell(withIdentifier: "imageCell", for: indexPath) as! ImageCell
+      imageCell.setupImageCell(with: "1")
+      return imageCell
     }
     
     else if indexPath.row == 1 {
-      
-      let cell1 = tableView.dequeueReusableCell(withIdentifier: "descriptCell", for: indexPath) as!
+      let descriptionCell = tableView.dequeueReusableCell(withIdentifier: "descriptCell", for: indexPath) as!
       DescriptCell
       guard let description = program?.descriptionText else { fatalError() }
-      cell1.descript.text = description.description
-      return cell1
+      descriptionCell.descriptionText.text = description.description
+      return descriptionCell
       
     }else{
-      
-      let cell = tableView.dequeueReusableCell(withIdentifier: "dayCell", for: indexPath) as! DayCell
+      let dayCell = tableView.dequeueReusableCell(withIdentifier: "dayCell", for: indexPath) as! DayCell
       guard let day = program?.days[indexPath.row-2] else { fatalError() }
-      cell.setupCell(dayCell: day)
-      return cell
+      dayCell.setupDayCell(dayCell: day)
+      return dayCell
     }
   }
 }

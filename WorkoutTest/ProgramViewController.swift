@@ -23,7 +23,7 @@ class ProgramViewController: UIViewController {
     tableView.register(ProgramCell.self, forCellReuseIdentifier: "ProgramCell")
     tableView.dataSource = self
     tableView.delegate = self
-    setupTableView()
+    configureTableView()
     
     repo.load(completion: { [weak self] data in
       self?.welcome = data
@@ -33,7 +33,7 @@ class ProgramViewController: UIViewController {
   }
 }
 extension ProgramViewController {
-  func setupTableView() {
+  func configureTableView() {
     view.addSubview(tableView)
     tableView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
@@ -54,10 +54,10 @@ extension ProgramViewController: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
-    guard let prog = welcome?.programs[indexPath.row] else { fatalError() }
-    cell.setupCell(programCell: prog)
-    return cell
+    guard let programCell = tableView.dequeueReusableCell(withIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
+    guard let program = welcome?.programs[indexPath.row] else { fatalError() }
+    programCell.setupProgramCell(programCell: program)
+    return programCell
   }
   
   //MARK: - UITableViewDelegate

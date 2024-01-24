@@ -9,7 +9,7 @@ import UIKit
 
 class DescriptCell: UITableViewCell {
   
-  var descript: UILabel = {
+  var descriptionText: UILabel = {
     var description = UILabel()
     description.font = UIFont.systemFont(ofSize: 18)
     description.textColor = .blue
@@ -19,7 +19,7 @@ class DescriptCell: UITableViewCell {
   
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier);
-    layoutCell()
+    setupLayoutCell()
     
   }
   
@@ -27,21 +27,17 @@ class DescriptCell: UITableViewCell {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func layoutCell() {
-    contentView.addSubview(descript)
-    descript.translatesAutoresizingMaskIntoConstraints = false
-    
+  func setupLayoutCell() {
+    contentView.addSubview(descriptionText)
+    descriptionText.translatesAutoresizingMaskIntoConstraints = false
     
     NSLayoutConstraint.activate([
-      descript.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-      descript.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-      descript.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-      descript.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
+      descriptionText.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+      descriptionText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+      descriptionText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+      descriptionText.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
     ])
     
   }
-  
-  func setupCellDescript(descriptCell: Program) {
-    self.descript.text = descriptCell.descriptionText
-  }
 }
+

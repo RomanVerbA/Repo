@@ -9,7 +9,7 @@ import UIKit
 
 class DayCell: UITableViewCell {
   
-  let daysOfWeek = ["Monday","Tuesday","Wednesday","Thurstay","Friday","Saturday","Sunday"]
+  let daysOfWeek = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
   
   let weekDeyNum: UILabel = {
     let deyNum = UILabel()
@@ -18,22 +18,16 @@ class DayCell: UITableViewCell {
     return deyNum
   }()
   
-  let excercisesCount: UILabel = {
+  let exercisesCount: UILabel = {
     let count = UILabel()
     count.font = UIFont.systemFont(ofSize: 18)
     count.textColor = .green
     return count
   }()
   
-  let imagerogram: UIImageView = {
-    var image = UIImageView()
-    return image
-  }()
-  
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier);
     layoutCell()
-    
     
   }
   
@@ -43,24 +37,24 @@ class DayCell: UITableViewCell {
   
   func layoutCell() {
     contentView.addSubview(weekDeyNum)
-    contentView.addSubview(excercisesCount)
+    contentView.addSubview(exercisesCount)
     weekDeyNum.translatesAutoresizingMaskIntoConstraints = false
-    excercisesCount.translatesAutoresizingMaskIntoConstraints = false
+    exercisesCount.translatesAutoresizingMaskIntoConstraints = false
     
     NSLayoutConstraint.activate([
       weekDeyNum.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
       weekDeyNum.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
       weekDeyNum.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
       
-      excercisesCount.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-      excercisesCount.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-      excercisesCount.leadingAnchor.constraint(equalTo: weekDeyNum.trailingAnchor, constant: 10),
-      excercisesCount.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
+      exercisesCount.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+      exercisesCount.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+      exercisesCount.leadingAnchor.constraint(equalTo: weekDeyNum.trailingAnchor, constant: 10),
+      exercisesCount.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
     ])
     
   }
   
-  func setupCell(dayCell: Day) {
+  func setupDayCell(dayCell: Day) {
     
     let dayIndex = dayCell.weekDayNum
     if dayIndex >= 0 && dayIndex < daysOfWeek.count {
@@ -69,6 +63,6 @@ class DayCell: UITableViewCell {
     } else {
       weekDeyNum.text = ""
     }
-    self.excercisesCount.text = "Excercises \(dayCell.exercises.count)"
+    self.exercisesCount.text = "Exercises \(dayCell.exercises.count)"
   }
 }

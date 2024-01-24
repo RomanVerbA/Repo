@@ -39,7 +39,7 @@ class ProgramCell: UITableViewCell {
   
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
-    setupCell()
+    layoutCell()
     
   }
   
@@ -47,7 +47,7 @@ class ProgramCell: UITableViewCell {
     fatalError("init(coder:) has not been implemented")
   }
   
-  private func setupCell() {
+  private func layoutCell() {
     [difficultyLabel, nameLabel, descriprionLabel,programType].forEach {
       $0.translatesAutoresizingMaskIntoConstraints = false
       contentView.addSubview($0)
@@ -75,7 +75,7 @@ class ProgramCell: UITableViewCell {
     ])
     
   }
-  func setupCell(programCell: Program) {
+  func setupProgramCell(programCell: Program) {
     self.nameLabel.text = programCell.name
     self.descriprionLabel.text = programCell.descriptionText
     self.programType.text = programCell.programType
