@@ -26,7 +26,7 @@ class DayCell: UITableViewCell {
   }()
   
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-    super.init(style: style, reuseIdentifier: reuseIdentifier);
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
     layoutCell()
     
   }
@@ -35,23 +35,21 @@ class DayCell: UITableViewCell {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func layoutCell() {
+  private func layoutCell() {
     contentView.addSubview(weekDeyNum)
     contentView.addSubview(exercisesCount)
     weekDeyNum.translatesAutoresizingMaskIntoConstraints = false
     exercisesCount.translatesAutoresizingMaskIntoConstraints = false
     
     NSLayoutConstraint.activate([
-      weekDeyNum.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+      weekDeyNum.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
       weekDeyNum.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-      weekDeyNum.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+      weekDeyNum.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
       
-      exercisesCount.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+      exercisesCount.topAnchor.constraint(equalTo: contentView.topAnchor),
       exercisesCount.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
       exercisesCount.leadingAnchor.constraint(equalTo: weekDeyNum.trailingAnchor, constant: 10),
-      exercisesCount.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
     ])
-    
   }
   
   func setupDayCell(dayCell: Day) {

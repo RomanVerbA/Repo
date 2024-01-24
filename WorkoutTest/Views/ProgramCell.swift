@@ -48,7 +48,7 @@ class ProgramCell: UITableViewCell {
   }
   
   private func layoutCell() {
-    [difficultyLabel, nameLabel, descriprionLabel,programType].forEach {
+    [difficultyLabel, nameLabel, descriprionLabel, programType].forEach {
       $0.translatesAutoresizingMaskIntoConstraints = false
       contentView.addSubview($0)
     }
