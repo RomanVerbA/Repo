@@ -42,9 +42,9 @@ class DayCell: UITableViewCell {
     exercisesCount.translatesAutoresizingMaskIntoConstraints = false
     
     NSLayoutConstraint.activate([
-      weekDeyNum.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
+      weekDeyNum.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
       weekDeyNum.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-      weekDeyNum.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
+      weekDeyNum.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
       
       exercisesCount.topAnchor.constraint(equalTo: contentView.topAnchor),
       exercisesCount.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
@@ -53,7 +53,6 @@ class DayCell: UITableViewCell {
   }
   
   func setupDayCell(dayCell: Day) {
-    
     let dayIndex = dayCell.weekDayNum
     if dayIndex >= 0 && dayIndex < daysOfWeek.count {
       let dayName = daysOfWeek[dayIndex]
