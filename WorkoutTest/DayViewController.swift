@@ -12,7 +12,7 @@ class DayViewController: UIViewController {
   var tableView = UITableView .init()
   
   var program: Program?
-  let addCells = 2
+  let staticCellsCount = 2
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -46,7 +46,7 @@ class DayViewController: UIViewController {
 
 extension DayViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return addCells + (program?.days.count)!
+    return staticCellsCount + (program?.days.count)!
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -66,7 +66,7 @@ extension DayViewController: UITableViewDataSource {
       
     }else{
       let dayCell = tableView.dequeueReusableCell(withIdentifier: "dayCell", for: indexPath) as! DayCell
-      guard let day = program?.days[indexPath.row-2] else { fatalError() }
+      guard let day = program?.days[indexPath.row-staticCellsCount] else { fatalError() }
       dayCell.setupDayCell(dayCell: day)
       return dayCell
     }
