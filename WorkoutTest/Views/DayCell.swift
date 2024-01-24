@@ -46,7 +46,7 @@ class DayCell: UITableViewCell {
       weekDeyNum.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
       weekDeyNum.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
       
-      exercisesCount.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+      exercisesCount.topAnchor.constraint(equalTo: contentView.topAnchor),
       exercisesCount.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
       exercisesCount.leadingAnchor.constraint(equalTo: weekDeyNum.trailingAnchor, constant: 10),
     ])
