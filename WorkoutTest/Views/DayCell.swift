@@ -58,7 +58,7 @@ class DayCell: UITableViewCell {
       let dayName = daysOfWeek[dayIndex]
       weekDeyNum.text = dayName
     } else {
-      weekDeyNum.text = ""
+      weekDeyNum.text = "        "
     }
     self.exercisesCount.text = "Exercises \(dayCell.exercises.count)"
   }
