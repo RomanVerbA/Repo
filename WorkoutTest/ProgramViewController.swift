@@ -70,9 +70,7 @@ extension ProgramViewController: UITableViewDataSource {
     
     deleteProgram.backgroundColor = .orange
     deleteProgram.image = UIImage(named: "delete")
-    
     return UISwipeActionsConfiguration(actions: [deleteProgram])
-    
   }
   
   //MARK: - UITableViewDelegate
