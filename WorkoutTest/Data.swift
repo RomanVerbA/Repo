@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Welcome
 struct Welcome: Codable {
-  let programs: [Program]
+  var programs: [Program]
 }
 
 // MARK: - Program
