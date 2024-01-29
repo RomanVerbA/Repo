@@ -31,11 +31,7 @@ class ProgramViewController: UIViewController {
     tableView.dataSource = self
     tableView.delegate = self
     configureTableView()
-    
-    repo.load(completion: { [weak self] data in
-      self?.welcome = data
-      self?.tableView.reloadData()
-    })
+    refreshData()
   }
   
   @objc func refreshData() {
