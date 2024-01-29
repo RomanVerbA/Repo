@@ -61,16 +61,16 @@ extension ProgramViewController: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-    let deleteProgram = UIContextualAction(style: .destructive, title: "Delete") { _, _, completion in
+    let deleteProgramAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, completion in
       
       self.welcome?.programs.remove(at: indexPath.row)
       tableView.deleteRows(at: [indexPath], with: .automatic)
       completion(true)
     }
     
-    deleteProgram.backgroundColor = .orange
-    deleteProgram.image = UIImage(named: "delete")
-    return UISwipeActionsConfiguration(actions: [deleteProgram])
+    deleteProgramAction.backgroundColor = .orange
+    deleteProgramAction.image = UIImage(named: "delete")
+    return UISwipeActionsConfiguration(actions: [deleteProgramAction])
   }
   
   //MARK: - UITableViewDelegate
