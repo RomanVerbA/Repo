@@ -15,12 +15,19 @@ class ProgramViewController: UIViewController {
   
   let repo = JsonRepo()
   
+  let myRefreshControl: UIRefreshControl = {
+    let refreshControl = UIRefreshControl()
+    refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+    return refreshControl
+  }()
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     title = "Programs"
     
     tableView.backgroundColor = .white
     tableView.register(ProgramCell.self, forCellReuseIdentifier: "ProgramCell")
+    tableView.refreshControl = myRefreshControl
     tableView.dataSource = self
     tableView.delegate = self
     configureTableView()
@@ -29,9 +36,17 @@ class ProgramViewController: UIViewController {
       self?.welcome = data
       self?.tableView.reloadData()
     })
-    
+  }
+  
+  @objc func refreshData() {
+    repo.load(completion: { [weak self] data in
+      self?.welcome = data
+      self?.tableView.reloadData()
+      self?.myRefreshControl.endRefreshing()
+    })
   }
 }
+
 extension ProgramViewController {
   func configureTableView() {
     view.addSubview(tableView)
