@@ -11,6 +11,8 @@ class DayViewController: UIViewController {
   
   var tableView = UITableView .init()
   
+  var confirmDelete: (() -> Void)?
+  
   var program: Program?
   let staticCellsCount = 2
   
@@ -20,6 +22,9 @@ class DayViewController: UIViewController {
     title = "Days"
     configureView()
     
+    let trashButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(openActionSheet))
+    navigationItem.rightBarButtonItem = trashButton
+    
     tableView.register(DayCell.self, forCellReuseIdentifier: "dayCell")
     tableView.register(DescriptCell.self, forCellReuseIdentifier: "descriptCell")
     tableView.register(ImageCell.self, forCellReuseIdentifier: "imageCell")
@@ -27,6 +32,10 @@ class DayViewController: UIViewController {
     tableView.dataSource = self
     tableView.delegate = self
     
+  }
+  
+  @objc func openActionSheet() {
+    showActionSheet()
   }
   
   func configureView() {
@@ -78,5 +87,24 @@ extension DayViewController: UITableViewDataSource {
 extension DayViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
+  }
+}
+
+//MARK: - ShowActionSheet
+
+extension DayViewController {
+  
+  func showActionSheet() {
+    let alertController = UIAlertController(title: "Do you really want to remove this program?", message: nil, preferredStyle: .actionSheet)
+    
+    let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+      self.confirmDelete?()
+      self.navigationController?.popViewController(animated: true)
+    }
+    let cancelAlert = UIAlertAction(title: "Cancel", style: .cancel) { _ in  }
+    alertController.addAction(cancelAlert)
+    alertController.addAction(deleteAction)
+    present(alertController, animated: true) {
+    }
   }
 }

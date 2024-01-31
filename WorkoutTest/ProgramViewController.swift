@@ -92,6 +92,16 @@ extension ProgramViewController: UITableViewDelegate {
     let selectedProgram = welcome?.programs[indexPath.row]
     let vc = DayViewController()
     vc.program = selectedProgram
+    vc.confirmDelete = { [weak self] in
+      self?.deleteProgram(at: indexPath.row)
+    }
     navigationController?.pushViewController(vc, animated: true)
+  }
+  // MARK: - Function for deleting a cell
+  
+  func deleteProgram(at index: Int) {
+    welcome?.programs.remove(at: index)
+    tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .left)
+    tableView.reloadData()
   }
 }
