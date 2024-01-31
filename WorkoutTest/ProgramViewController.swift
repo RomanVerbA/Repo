@@ -93,7 +93,7 @@ extension ProgramViewController: UITableViewDelegate {
     let vc = DayViewController()
     vc.program = selectedProgram
     vc.confirmDelete = { [weak self] in
-      self?.deleteProgram(atIndex: indexPath.row)
+      self?.deleteProgram(at: indexPath.row)
     }
     navigationController?.pushViewController(vc, animated: true)
   }
