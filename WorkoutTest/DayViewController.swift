@@ -101,8 +101,7 @@ extension DayViewController {
       self.confirmDelete?()
       self.navigationController?.popViewController(animated: true)
     }
-    let cancelAlert = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-    }
+    let cancelAlert = UIAlertAction(title: "Cancel", style: .cancel) { _ in  }
     alertController.addAction(cancelAlert)
     alertController.addAction(deleteAction)
     present(alertController, animated: true) {
