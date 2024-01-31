@@ -99,7 +99,7 @@ extension ProgramViewController: UITableViewDelegate {
   }
   // MARK: - Function for deleting a cell
   
-  func deleteProgram(atIndex index: Int) {
+  func deleteProgram(at index: Int) {
     welcome?.programs.remove(at: index)
     tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .left)
     tableView.reloadData()
