@@ -32,6 +32,7 @@ class ProgramViewController: UIViewController {
     tableView.delegate = self
     configureTableView()
     refreshData()
+    startDeleteTimer()
   }
   
   @objc func refreshData() {
@@ -103,5 +104,18 @@ extension ProgramViewController: UITableViewDelegate {
     welcome?.programs.remove(at: index)
     tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .left)
     tableView.reloadData()
+  }
+  
+  func startDeleteTimer()  {
+    
+    let timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true, block:{ timer in
+      if (self.welcome?.programs.first) != nil{
+        self.welcome?.programs.removeFirst()
+        self.tableView.reloadData()
+      }else{
+        timer.invalidate()
+        self.refreshData()
+      }
+    })
   }
 }
