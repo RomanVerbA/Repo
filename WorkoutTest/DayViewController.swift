@@ -22,7 +22,7 @@ class DayViewController: UIViewController {
     title = "Days"
     configureView()
     
-    let trashButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(openActionSheet))
+    let trashButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(showActionSheet))
     navigationItem.rightBarButtonItem = trashButton
     
     tableView.register(DayCell.self, forCellReuseIdentifier: "dayCell")
@@ -32,10 +32,6 @@ class DayViewController: UIViewController {
     tableView.dataSource = self
     tableView.delegate = self
     
-  }
-  
-  @objc func openActionSheet() {
-    showActionSheet()
   }
   
   func configureView() {
@@ -94,7 +90,7 @@ extension DayViewController: UITableViewDelegate {
 
 extension DayViewController {
   
-  func showActionSheet() {
+  @objc func showActionSheet() {
     let alertController = UIAlertController(title: "Do you really want to remove this program?", message: nil, preferredStyle: .actionSheet)
     
     let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
