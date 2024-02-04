@@ -15,6 +15,8 @@ class ProgramViewController: UIViewController {
   
   let repo = JsonRepo()
   
+  var timer: Timer?
+  
   let myRefreshControl: UIRefreshControl = {
     let refreshControl = UIRefreshControl()
     refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
@@ -32,7 +34,7 @@ class ProgramViewController: UIViewController {
     tableView.delegate = self
     configureTableView()
     refreshData()
-    startDeleteTimer()
+    
   }
   
   @objc func refreshData() {
@@ -40,7 +42,9 @@ class ProgramViewController: UIViewController {
       self?.welcome = data
       self?.tableView.reloadData()
       self?.myRefreshControl.endRefreshing()
+      self?.startDeleteTimer()
     })
+    
   }
 }
 
@@ -89,6 +93,7 @@ extension ProgramViewController: UITableViewDataSource {
 }
 extension ProgramViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    stopTimer()
     tableView.deselectRow(at: indexPath, animated: true)
     let selectedProgram = welcome?.programs[indexPath.row]
     let vc = DayViewController()
@@ -103,19 +108,24 @@ extension ProgramViewController: UITableViewDelegate {
   func deleteProgram(at index: Int) {
     welcome?.programs.remove(at: index)
     tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .left)
-    tableView.reloadData()
   }
+  // MARK: - Start timer
   
-  func startDeleteTimer()  {
-    
-    let timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true, block:{ timer in
-      if (self.welcome?.programs.first) != nil{
-        self.welcome?.programs.removeFirst()
-        self.tableView.reloadData()
-      }else{
-        timer.invalidate()
+  func startDeleteTimer() {
+    timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true, block: { _ in
+      var currentIndex = (self.welcome?.programs.count ?? 0) - 1
+      guard currentIndex >= 0 else {
+        self.stopTimer()
         self.refreshData()
+        return
       }
+      self.deleteProgram(at: currentIndex)
+      currentIndex -= 1
     })
+  }
+  // MARK: - Stop timer
+  
+  func stopTimer() {
+    timer?.invalidate()
   }
 }
