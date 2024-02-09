@@ -83,6 +83,25 @@ extension DayViewController: UITableViewDataSource {
 extension DayViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
+    
+    let dayIndex = indexPath.row - staticCellsCount
+    guard dayIndex >= 0, dayIndex < program?.days.count ?? 0 else { return }
+    let selectedDay = program?.days[dayIndex]
+    
+    let exerciseController = ExerciseController()
+    if let firstExercise = selectedDay?.exercises.first {
+      exerciseController.nameExercise.text = firstExercise.name
+      exerciseController.descriptionLabel.text = firstExercise.exDescription.technique
+    }
+    
+    let timerView = TimerView()
+    if let firstExercise = selectedDay?.exercises.first{
+      timerView.nameLabel.text = firstExercise.name
+      exerciseController.timerView = timerView
+    }
+    
+    exerciseController.modalPresentationStyle = .fullScreen
+    self.present(exerciseController, animated: true, completion: nil)
   }
 }
 
