@@ -19,6 +19,8 @@
 		922C5CF32B5BF46E00EF2975 /* DayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922C5CF22B5BF46E00EF2975 /* DayCell.swift */; };
 		922C5CF52B5BF5C600EF2975 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922C5CF42B5BF5C600EF2975 /* Data.swift */; };
 		922C5CF72B5BF61D00EF2975 /* Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922C5CF62B5BF61D00EF2975 /* Json.swift */; };
+		92AC7B9D2B7381600063D7D9 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AC7B9C2B7381600063D7D9 /* TimerView.swift */; };
+		92AC7B9F2B738F6E0063D7D9 /* ExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AC7B9E2B738F6E0063D7D9 /* ExerciseController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		922C5CF22B5BF46E00EF2975 /* DayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCell.swift; sourceTree = "<group>"; };
 		922C5CF42B5BF5C600EF2975 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		922C5CF62B5BF61D00EF2975 /* Json.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Json.swift; sourceTree = "<group>"; };
+		92AC7B9C2B7381600063D7D9 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		92AC7B9E2B738F6E0063D7D9 /* ExerciseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +105,7 @@
 			children = (
 				922C5CD92B5BEAC900EF2975 /* ProgramViewController.swift */,
 				922C5CEE2B5BF2F400EF2975 /* DayViewController.swift */,
+				92AC7B9E2B738F6E0063D7D9 /* ExerciseController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -112,6 +117,7 @@
 				922C5CF22B5BF46E00EF2975 /* DayCell.swift */,
 				9201364B2B5FE00000BC04D8 /* DescriptCell.swift */,
 				9201364D2B5FE65B00BC04D8 /* ImageCell.swift */,
+				92AC7B9C2B7381600063D7D9 /* TimerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -201,6 +207,8 @@
 				922C5CD62B5BEAC900EF2975 /* AppDelegate.swift in Sources */,
 				922C5CD82B5BEAC900EF2975 /* SceneDelegate.swift in Sources */,
 				922C5CEF2B5BF2F400EF2975 /* DayViewController.swift in Sources */,
+				92AC7B9D2B7381600063D7D9 /* TimerView.swift in Sources */,
+				92AC7B9F2B738F6E0063D7D9 /* ExerciseController.swift in Sources */,
 				922C5CF32B5BF46E00EF2975 /* DayCell.swift in Sources */,
 				922C5CF12B5BF41500EF2975 /* ProgramCell.swift in Sources */,
 				922C5CF72B5BF61D00EF2975 /* Json.swift in Sources */,
