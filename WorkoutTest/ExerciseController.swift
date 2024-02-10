@@ -17,18 +17,19 @@ class ExerciseController: UIViewController {
     didSet {
       nameExercise.text = exercise?.name
       descriptionLabel.text = exercise?.exDescription.technique
+      timerView.nameLabel.text = exercise?.name
     }
   }
   
   
-  let myimage: UIImageView = {
+  private let myimage: UIImageView = {
     var myimage = UIImageView()
     myimage.backgroundColor = .white
     myimage = UIImageView.init(image: UIImage(named: "1"))
     return myimage
   }()
   
-  let nameExercise: UILabel = {
+  private let nameExercise: UILabel = {
     let name = UILabel()
     name.font = .systemFont(ofSize: 20)
     name.numberOfLines = 0
@@ -37,7 +38,7 @@ class ExerciseController: UIViewController {
     return name
   }()
   
-  let descriptionLabel: UILabel = {
+  private let descriptionLabel: UILabel = {
     let description = UILabel()
     description.font = .systemFont(ofSize: 18)
     description.numberOfLines = 0
@@ -45,7 +46,7 @@ class ExerciseController: UIViewController {
     return description
   }()
   
-  let backButton: UIButton = {
+  private lazy var backButton: UIButton = {
     let backButton = UIButton()
     backButton.setTitle("back", for: .normal)
     backButton.backgroundColor = .cyan
@@ -53,7 +54,7 @@ class ExerciseController: UIViewController {
     return backButton
   }()
   
-  let nextButton: UIButton = {
+  private let nextButton: UIButton = {
     let nextButton = UIButton()
     nextButton.setTitle("tap when done", for: .normal)
     nextButton.backgroundColor = .cyan
@@ -64,13 +65,13 @@ class ExerciseController: UIViewController {
     super.viewDidLoad()
     view.backgroundColor = .white
     setupView()
-    startTimer()
     setupTimerView()
+    startTimer()
     
   }
   // MARK: - setupView
   
-  func setupView() {
+  private func setupView() {
     
     view.addSubview(myimage)
     view.addSubview(nameExercise)
@@ -114,7 +115,7 @@ class ExerciseController: UIViewController {
   }
   // MARK: - setupTimerView
   
-  func setupTimerView() {
+  private func setupTimerView() {
     
     view.addSubview(timerView)
     timerView.translatesAutoresizingMaskIntoConstraints = false
@@ -135,19 +136,28 @@ class ExerciseController: UIViewController {
     timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
   }
   
-  @objc func updateTimer() {
+  @objc private func updateTimer() {
     secondRemaining -= 1
     timerView.timerLabel.text = "\(secondRemaining)"
     
     if secondRemaining == 0 {
-      timer?.invalidate()
-      timerView.isHidden = true
+      stopTimer()
+      removeTimerView()
     }
+  }
+  
+  func stopTimer() {
+    timer?.invalidate()
+    timer = nil
+  }
+  
+  func removeTimerView() {
+    timerView.removeFromSuperview()
   }
   
   // MARK: - backButton + Alert
   
-  @objc func actionBackButton() {
+  @objc private func actionBackButton() {
     let alertController = UIAlertController(title: "Are you sure you want to quit?", message: nil, preferredStyle: .alert)
     
     alertController.addAction(UIAlertAction(title: "Yes", style: .destructive) { _ in
