@@ -89,16 +89,10 @@ extension DayViewController: UITableViewDelegate {
     let selectedDay = program?.days[dayIndex]
     
     let exerciseController = ExerciseController()
-    if let firstExercise = selectedDay?.exercises.first {
-      exerciseController.nameExercise.text = firstExercise.name
-      exerciseController.descriptionLabel.text = firstExercise.exDescription.technique
-    }
     
-    let timerView = TimerView()
-    if let firstExercise = selectedDay?.exercises.first{
-      timerView.nameLabel.text = firstExercise.name
-      exerciseController.timerView = timerView
-    }
+    let firstExercise = selectedDay?.exercises.first
+    exerciseController.exercise = firstExercise
+    exerciseController.timerView.exercise = firstExercise
     
     exerciseController.modalPresentationStyle = .fullScreen
     self.present(exerciseController, animated: true, completion: nil)
