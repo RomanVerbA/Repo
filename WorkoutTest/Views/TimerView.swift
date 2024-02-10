@@ -9,13 +9,9 @@ import UIKit
 
 class TimerView: UIView {
   
-  var exercise: Exercise? {
-    didSet{
-      nameLabel.text = exercise?.name
-    }
-  }
+  var exercise: Exercise?
   
-  let textLabel: UILabel = {
+  private let textLabel: UILabel = {
     let textLabel = UILabel()
     textLabel.font = UIFont.systemFont(ofSize: 50)
     textLabel.text = "GET READY!"
@@ -32,7 +28,7 @@ class TimerView: UIView {
     return timerLabel
   }()
   
-  let workoutStartLabel: UILabel = {
+  private let workoutStartLabel: UILabel = {
     let workoutStart = UILabel()
     workoutStart.font = UIFont.systemFont(ofSize: 22)
     workoutStart.textColor = .lightGray
@@ -43,13 +39,13 @@ class TimerView: UIView {
   
   let nameLabel: UILabel = {
     let name = UILabel()
-    name.font = UIFont.systemFont(ofSize: 35)
+    name.font = UIFont.systemFont(ofSize: 32)
     name.textAlignment = .center
     name.numberOfLines = 0
     return name
   }()
   
-  let exerciseImage: UIImageView = {
+  private let exerciseImage: UIImageView = {
     var image = UIImageView()
     image = UIImageView.init(image: UIImage(named: "1"))
     return image
@@ -65,7 +61,7 @@ class TimerView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func setupTimerView() {
+  private func setupTimerView() {
     
     backgroundColor = .white
     
@@ -83,7 +79,7 @@ class TimerView: UIView {
     
     NSLayoutConstraint.activate([
       
-      textLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 30),
+      textLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
       textLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
       textLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
       
@@ -95,14 +91,14 @@ class TimerView: UIView {
       workoutStartLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
       workoutStartLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
       
-      nameLabel.topAnchor.constraint(equalTo: workoutStartLabel.bottomAnchor, constant: 30),
+      nameLabel.topAnchor.constraint(equalTo: workoutStartLabel.bottomAnchor, constant: 10),
       nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
       nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
       
-      exerciseImage.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
+      exerciseImage.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
       exerciseImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
       exerciseImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-      exerciseImage.heightAnchor.constraint(equalToConstant: 350)
+      exerciseImage.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10)
     ])
   }
 }
