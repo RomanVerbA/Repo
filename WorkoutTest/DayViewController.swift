@@ -90,9 +90,8 @@ extension DayViewController: UITableViewDelegate {
     
     let exerciseController = ExerciseController()
     
-    let firstExercise = selectedDay?.exercises.first
-    exerciseController.exercise = firstExercise
-    exerciseController.timerView.exercise = firstExercise
+    let exercises = selectedDay?.exercises ?? []
+    exerciseController.exercise = exercises
     
     exerciseController.modalPresentationStyle = .fullScreen
     self.present(exerciseController, animated: true, completion: nil)

@@ -167,4 +167,19 @@ class ExerciseController: UIViewController {
     alertController.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
     present(alertController, animated: true, completion: nil)
   }
+  
+  @objc private func goToNextExcercise() {
+    guard currentExerciseIndex < exercise.count - 1 else {
+      dismiss(animated: true, completion: nil)
+      return
+    }
+    
+    currentExerciseIndex += 1
+    
+    let exercis = exercise[currentExerciseIndex]
+    nameExercise.text = exercis.name
+    descriptionLabel.text = exercis.exDescription.technique
+    
+  
+  }
 }
