@@ -12,15 +12,28 @@ class ExerciseController: UIViewController {
   var timerView = TimerView()
   var secondRemaining = 10
   var timer: Timer?
+  var currentExerciseIndex = 0
   
-  var exercise: Exercise? {
+  var exercise: [Exercise] = [] {
     didSet {
-      nameExercise.text = exercise?.name
-      descriptionLabel.text = exercise?.exDescription.technique
-      timerView.nameLabel.text = exercise?.name
+      nameExercise.text = exercise.first?.name
+      descriptionLabel.text = exercise.first?.exDescription.technique
+      timerView.nameLabel.text = exercise.first?.name
     }
   }
   
+  
+  lazy var myScrollView: UIScrollView = {
+    let scrollView = UIScrollView()
+    scrollView.backgroundColor = .red
+    scrollView.frame = view.bounds
+    scrollView.contentSize = contentCize
+    return scrollView
+  }()
+  
+  var contentCize: CGSize {
+    CGSize(width: view.frame.width, height: view.frame.height + 400)
+  }
   
   private let myimage: UIImageView = {
     var myimage = UIImageView()
@@ -54,16 +67,17 @@ class ExerciseController: UIViewController {
     return backButton
   }()
   
-  private let nextButton: UIButton = {
+  private lazy var nextButton: UIButton = {
     let nextButton = UIButton()
     nextButton.setTitle("tap when done", for: .normal)
     nextButton.backgroundColor = .cyan
+    nextButton.addTarget(self, action: #selector(goToNextExcercise), for: .touchUpInside)
     return nextButton
   }()
-  
+ 
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = .white
+    view.backgroundColor = .green
     setupView()
     setupTimerView()
     startTimer()
@@ -72,13 +86,15 @@ class ExerciseController: UIViewController {
   // MARK: - setupView
   
   private func setupView() {
+    view.addSubview(myScrollView)
+    myScrollView.addSubview(myimage)
+    myScrollView.addSubview(nameExercise)
+    myScrollView.addSubview(descriptionLabel)
+    myScrollView.addSubview(backButton)
+    myScrollView.addSubview(nextButton)
+  
     
-    view.addSubview(myimage)
-    view.addSubview(nameExercise)
-    view.addSubview(descriptionLabel)
-    view.addSubview(backButton)
-    view.addSubview(nextButton)
-    
+    myScrollView.translatesAutoresizingMaskIntoConstraints = false
     myimage.translatesAutoresizingMaskIntoConstraints = false
     nameExercise.translatesAutoresizingMaskIntoConstraints = false
     descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -87,29 +103,38 @@ class ExerciseController: UIViewController {
     
     NSLayoutConstraint.activate([
       
-      myimage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-      myimage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-      myimage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+      myScrollView.topAnchor.constraint(equalTo: view.topAnchor),
+      myScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      myScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+      myScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+      myScrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
+      myScrollView.heightAnchor.constraint(equalTo: view.heightAnchor),
+      
+      myimage.topAnchor.constraint(equalTo: myScrollView.topAnchor, constant: 10),
+      myimage.leadingAnchor.constraint(equalTo: myScrollView.leadingAnchor, constant: 10),
+      myimage.trailingAnchor.constraint(equalTo: myScrollView.trailingAnchor, constant: -10),
       myimage.heightAnchor.constraint(equalToConstant: 350),
       
       nameExercise.topAnchor.constraint(equalTo: myimage.bottomAnchor, constant: 10),
-      nameExercise.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-      nameExercise.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+      nameExercise.leadingAnchor.constraint(equalTo: myScrollView.leadingAnchor, constant: 10),
+      nameExercise.trailingAnchor.constraint(equalTo: myScrollView.trailingAnchor, constant: -10),
       
       
       descriptionLabel.topAnchor.constraint(equalTo: nameExercise.bottomAnchor, constant: 10),
-      descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-      descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+      descriptionLabel.leadingAnchor.constraint(equalTo: myScrollView.leadingAnchor, constant: 10),
+      descriptionLabel.trailingAnchor.constraint(equalTo: myScrollView.trailingAnchor, constant: -10),
+      descriptionLabel.bottomAnchor.constraint(equalTo: myScrollView.bottomAnchor),
       
-      backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-      backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+      backButton.leadingAnchor.constraint(equalTo: myScrollView.leadingAnchor, constant: 10),
+      backButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -35),
       backButton.widthAnchor.constraint(equalToConstant: 100),
       backButton.heightAnchor.constraint(equalToConstant: 50),
       
       nextButton.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: 10),
-      nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-      nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+      nextButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -35),
+      nextButton.trailingAnchor.constraint(equalTo: myScrollView.trailingAnchor, constant: -10),
       nextButton.heightAnchor.constraint(equalToConstant: 50),
+      
     ])
     
   }
