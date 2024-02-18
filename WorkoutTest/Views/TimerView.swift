@@ -23,7 +23,7 @@ class TimerView: UIView {
     let timerLabel = UILabel()
     timerLabel.font = UIFont.systemFont(ofSize: 150)
     timerLabel.textColor = .cyan
-    timerLabel.text = "10"
+    timerLabel.text = "3"
     timerLabel.textAlignment = .center
     return timerLabel
   }()

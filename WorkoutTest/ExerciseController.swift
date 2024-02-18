@@ -10,7 +10,7 @@ import UIKit
 class ExerciseController: UIViewController {
   
   private var timerView = TimerView()
-  private var secondRemaining = 10
+  private var secondRemaining = 3
   private  var timer: Timer?
   private var currentExerciseIndex = 0
   
@@ -47,7 +47,7 @@ class ExerciseController: UIViewController {
     description.font = .systemFont(ofSize: 21)
     description.numberOfLines = 0
     description.textAlignment = .center
-    description.textColor = .lightGray
+    description.textColor = .darkGray
     return description
   }()
   
@@ -167,7 +167,16 @@ class ExerciseController: UIViewController {
   }
   
   private func removeTimerView() {
-    timerView.removeFromSuperview()
+    
+    UIView.animate(withDuration: 0.5, delay: 0.1, animations: {
+      self.nextButton.frame.origin.y -= 100
+      self.backButton.frame.origin.y -= 100
+      self.timerView.alpha = 0
+    }, completion: { (finished) in
+      if finished {
+        self.timerView.removeFromSuperview()
+      }
+    })
   }
   
   // MARK: - backButton + Alert
@@ -193,9 +202,14 @@ class ExerciseController: UIViewController {
     currentExerciseIndex += 1
     
     let exercise = exercises[currentExerciseIndex]
-    nameExercise.text = exercise.name
-    descriptionLabel.text = exercise.exDescription.technique
     
-    myScrollView.setContentOffset(.zero, animated: false)
+    UIView.transition(with: myScrollView, duration: 0.4, options: .transitionCrossDissolve, animations: {
+      
+      self.nameExercise.text = exercise.name
+      self.descriptionLabel.text = exercise.exDescription.technique
+      self.myScrollView.setContentOffset(.zero, animated: false)
+      
+    }, completion: nil)
   }
 }
+
