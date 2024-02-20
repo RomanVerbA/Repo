@@ -9,16 +9,18 @@ import UIKit
 
 class ExerciseController: UIViewController {
   
-  private var timerView = TimerView()
-  private var secondRemaining = 3
+  private var timerView: TimerView?
+  private var secondRemaining = 10
   private  var timer: Timer?
   private var currentExerciseIndex = 0
+  
+  private lazy var nextButtonBottom = nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 100)
+  private lazy var backButtonBottom = backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 100)
   
   var exercises: [Exercise] = [] {
     didSet {
       nameExercise.text = exercises.first?.name
       descriptionLabel.text = exercises.first?.exDescription.technique
-      timerView.nameLabel.text = exercises.first?.name
     }
   }
   
@@ -116,12 +118,12 @@ class ExerciseController: UIViewController {
       descriptionLabel.bottomAnchor.constraint(equalTo: myScrollView.contentLayoutGuide.bottomAnchor),
       
       backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-      backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+      backButtonBottom,
       backButton.widthAnchor.constraint(equalToConstant: 100),
       backButton.heightAnchor.constraint(equalToConstant: 50),
       
       nextButton.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: 10),
-      nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+      nextButtonBottom,
       nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
       nextButton.heightAnchor.constraint(equalToConstant: 50),
       
@@ -131,8 +133,12 @@ class ExerciseController: UIViewController {
   // MARK: - setupTimerView
   
   private func setupTimerView() {
+    timerView = TimerView()
+    guard let timerView = timerView else { return }
     
     view.addSubview(timerView)
+    timerView.nameLabel.text = exercises.first?.name
+    timerView.timerLabel.text = "\(secondRemaining)"
     timerView.translatesAutoresizingMaskIntoConstraints = false
     
     NSLayoutConstraint.activate([
@@ -153,7 +159,7 @@ class ExerciseController: UIViewController {
   
   @objc private func updateTimer() {
     secondRemaining -= 1
-    timerView.timerLabel.text = "\(secondRemaining)"
+    timerView?.timerLabel.text = "\(secondRemaining)"
     
     if secondRemaining == 0 {
       stopTimer()
@@ -168,13 +174,15 @@ class ExerciseController: UIViewController {
   
   private func removeTimerView() {
     
-    UIView.animate(withDuration: 0.5, delay: 0.1, animations: {
-      self.nextButton.frame.origin.y -= 100
-      self.backButton.frame.origin.y -= 100
-      self.timerView.alpha = 0
-    }, completion: { (finished) in
+    UIView.animate(withDuration: 1, animations: {
+      self.nextButtonBottom.constant = -10
+      self.backButtonBottom.constant = -10
+      self.timerView?.alpha = 0
+      self.view.layoutIfNeeded()
+    }, completion: { finished in
       if finished {
-        self.timerView.removeFromSuperview()
+        self.timerView?.removeFromSuperview()
+        self.timerView = nil
       }
     })
   }
