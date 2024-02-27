@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ImageCell: UITableViewCell {
   
@@ -22,15 +23,11 @@ class ImageCell: UITableViewCell {
   
   func setupLayout() {
     contentView.addSubview(myImageView)
-    myImageView.translatesAutoresizingMaskIntoConstraints = false
     
-    NSLayoutConstraint.activate([
-      myImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-      myImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-      myImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-      myImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-      myImageView.heightAnchor.constraint(equalToConstant: 350)
-    ])
+    myImageView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
+      $0.height.equalTo(350).priority(750)
+    }
   }
   
   func setupImageCell(with imageName: String) {

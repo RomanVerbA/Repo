@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class DescriptCell: UITableViewCell {
   
@@ -29,15 +30,13 @@ class DescriptCell: UITableViewCell {
   
   func setupLayoutCell() {
     contentView.addSubview(descriptionText)
-    descriptionText.translatesAutoresizingMaskIntoConstraints = false
     
-    NSLayoutConstraint.activate([
-      descriptionText.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-      descriptionText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-      descriptionText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-      descriptionText.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
-    ])
-    
+    descriptionText.snp.makeConstraints {
+      $0.top.equalToSuperview().offset(5)
+      $0.leading.equalTo(contentView.snp.leading).offset(10)
+      $0.trailing.equalTo(contentView.snp.trailing).offset(-5)
+      $0.bottom.equalTo(contentView.snp.bottom).offset(-5)
+    }
   }
 }
 

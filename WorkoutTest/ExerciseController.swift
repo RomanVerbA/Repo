@@ -94,7 +94,7 @@ class ExerciseController: UIViewController {
     }
     
     myImage.snp.makeConstraints {
-      $0.top.equalTo(myScrollView.snp.top).offset(10)
+      $0.top.equalToSuperview().offset(10)
       $0.leading.equalTo(myScrollView.frameLayoutGuide).offset(10)
       $0.trailing.equalTo(myScrollView.frameLayoutGuide).offset(-10)
       $0.height.equalTo(350)
@@ -110,7 +110,7 @@ class ExerciseController: UIViewController {
       $0.top.equalTo(nameExercise.snp.bottom).offset(10)
       $0.leading.equalTo(myScrollView.frameLayoutGuide).offset(10)
       $0.trailing.equalTo(myScrollView.frameLayoutGuide).offset(-10)
-      $0.bottom.equalTo(myScrollView.snp.bottom)
+      $0.bottom.equalToSuperview()
     }
     
     nextButton.snp.makeConstraints {
@@ -123,8 +123,7 @@ class ExerciseController: UIViewController {
     backButton.snp.makeConstraints {
       $0.leading.equalToSuperview().offset(10)
       backButtonBottom = $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(100).constraint
-      $0.width.equalTo(100)
-      $0.height.equalTo(50)
+      $0.size.equalTo(CGSize(width: 100, height: 50))
     }
   }
   
