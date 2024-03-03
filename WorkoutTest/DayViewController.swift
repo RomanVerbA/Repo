@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class DayViewController: UIViewController {
   
@@ -37,14 +38,9 @@ class DayViewController: UIViewController {
   func configureView() {
     view.addSubview(tableView)
     
-    tableView.translatesAutoresizingMaskIntoConstraints = false
-    
-    NSLayoutConstraint.activate([
-      tableView.topAnchor.constraint(equalTo: view.topAnchor),
-      tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-    ])
+    tableView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
+    }
   }
 }
 //MARK: - UITableViewDataSource

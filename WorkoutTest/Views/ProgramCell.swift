@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ProgramCell: UITableViewCell {
   
@@ -27,6 +28,7 @@ class ProgramCell: UITableViewCell {
     let description = UILabel()
     description.font = UIFont.systemFont(ofSize: 15)
     description.textColor = .gray
+    description.numberOfLines = 0
     return description
   }()
   
@@ -49,32 +51,35 @@ class ProgramCell: UITableViewCell {
   
   private func layoutCell() {
     [difficultyLabel, nameLabel, descriprionLabel, programType].forEach {
-      $0.translatesAutoresizingMaskIntoConstraints = false
       contentView.addSubview($0)
     }
     
-    descriprionLabel.numberOfLines = 0
+    difficultyLabel.snp.makeConstraints {
+      $0.top.equalTo(descriprionLabel.snp.bottom).offset(5)
+      $0.leading.equalTo(contentView.snp.leading).offset(10)
+      $0.trailing.equalTo(contentView.snp.trailing).offset(-8)
+      $0.bottom.equalTo(contentView.snp.bottom).offset(-5)
+    }
     
-    NSLayoutConstraint.activate([
-      difficultyLabel.topAnchor.constraint(equalTo: descriprionLabel.bottomAnchor, constant: 5),
-      difficultyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-      difficultyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-      difficultyLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
-      
-      nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor,constant: 5),
-      nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 10),
-      nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -8),
-      
-      descriprionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5),
-      descriprionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 10),
-      descriprionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -8),
-      
-      programType.topAnchor.constraint(equalTo: descriprionLabel.bottomAnchor, constant: 5),
-      programType.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-      programType.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
-    ])
+    nameLabel.snp.makeConstraints {
+      $0.top.equalTo(contentView.snp.top).offset(5)
+      $0.left.equalTo(contentView.snp.left).offset(10)
+      $0.trailing.equalTo(contentView.snp.trailing).offset(-8)
+    }
     
+    descriprionLabel.snp.makeConstraints {
+      $0.top.equalTo(nameLabel.snp.bottom).offset(5)
+      $0.leading.equalTo(contentView.snp.leading).offset(10)
+      $0.trailing.equalTo(contentView.snp.trailing).offset(-8)
+    }
+    
+    programType.snp.makeConstraints {
+      $0.top.equalTo(descriprionLabel.snp.bottom).offset(5)
+      $0.trailing.equalTo(contentView.snp.trailing).offset(-8)
+      $0.bottom.equalTo(contentView.snp.bottom).offset(-5)
+    }
   }
+  
   func setupProgramCell(programCell: Program) {
     self.nameLabel.text = programCell.name
     self.descriprionLabel.text = programCell.descriptionText

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ProgramViewController: UIViewController {
   
@@ -46,13 +47,9 @@ class ProgramViewController: UIViewController {
 extension ProgramViewController {
   func configureTableView() {
     view.addSubview(tableView)
-    tableView.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-      tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      tableView.topAnchor.constraint(equalTo: view.topAnchor),
-      tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-    ])
+    tableView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+    }
   }
 }
 

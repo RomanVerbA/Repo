@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class TimerView: UIView {
   
@@ -46,7 +47,7 @@ class TimerView: UIView {
   
   private let exerciseImage: UIImageView = {
     var image = UIImageView()
-    image = UIImageView.init(image: UIImage(named: "1"))
+    image.image = UIImage(named: "1")
     return image
   }()
   
@@ -70,34 +71,36 @@ class TimerView: UIView {
     addSubview(nameLabel)
     addSubview(exerciseImage)
     
-    textLabel.translatesAutoresizingMaskIntoConstraints = false
-    timerLabel.translatesAutoresizingMaskIntoConstraints = false
-    workoutStartLabel.translatesAutoresizingMaskIntoConstraints = false
-    nameLabel.translatesAutoresizingMaskIntoConstraints = false
-    exerciseImage.translatesAutoresizingMaskIntoConstraints = false
+    textLabel.snp.makeConstraints {
+      $0.top.equalTo(safeAreaLayoutGuide.snp.top).offset(10)
+      $0.leading.equalToSuperview().offset(10)
+      $0.trailing.equalToSuperview().offset(-10)
+    }
     
-    NSLayoutConstraint.activate([
-      
-      textLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
-      textLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-      textLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-      
-      timerLabel.topAnchor.constraint(equalTo: textLabel.bottomAnchor, constant: 10),
-      timerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-      timerLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-      
-      workoutStartLabel.topAnchor.constraint(equalTo: timerLabel.bottomAnchor, constant: 10),
-      workoutStartLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-      workoutStartLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-      
-      nameLabel.topAnchor.constraint(equalTo: workoutStartLabel.bottomAnchor, constant: 10),
-      nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-      nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-      
-      exerciseImage.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
-      exerciseImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-      exerciseImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-      exerciseImage.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10)
-    ])
+    timerLabel.snp.makeConstraints {
+      $0.top.equalTo(textLabel.snp.bottom).offset(10)
+      $0.leading.equalToSuperview().offset(10)
+      $0.trailing.equalToSuperview().offset(-10)
+    }
+    
+    workoutStartLabel.snp.makeConstraints {
+      $0.top.equalTo(timerLabel.snp.bottom).offset(10)
+      $0.leading.equalToSuperview().offset(10)
+      $0.trailing.equalToSuperview().offset(-10)
+    }
+    
+    nameLabel.snp.makeConstraints {
+      $0.top.equalTo(workoutStartLabel.snp.bottom).offset(10)
+      $0.leading.equalToSuperview().offset(10)
+      $0.trailing.equalToSuperview().offset(-10)
+    }
+    
+    exerciseImage.snp.makeConstraints {
+      $0.top.equalTo(nameLabel.snp.bottom).offset(10)
+      $0.leading.equalToSuperview().offset(10)
+      $0.trailing.equalToSuperview().offset(-10)
+      $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-10)
+    }
   }
 }
+

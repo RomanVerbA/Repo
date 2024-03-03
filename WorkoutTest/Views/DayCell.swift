@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class DayCell: UITableViewCell {
   
@@ -38,18 +39,18 @@ class DayCell: UITableViewCell {
   private func layoutCell() {
     contentView.addSubview(weekDeyNum)
     contentView.addSubview(exercisesCount)
-    weekDeyNum.translatesAutoresizingMaskIntoConstraints = false
-    exercisesCount.translatesAutoresizingMaskIntoConstraints = false
     
-    NSLayoutConstraint.activate([
-      weekDeyNum.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-      weekDeyNum.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-      weekDeyNum.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
-      
-      exercisesCount.topAnchor.constraint(equalTo: contentView.topAnchor),
-      exercisesCount.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-      exercisesCount.leadingAnchor.constraint(equalTo: weekDeyNum.trailingAnchor, constant: 10),
-    ])
+    weekDeyNum.snp.makeConstraints { make in
+      make.top.equalTo(contentView.snp.top).offset(5)
+      make.leading.equalTo(contentView.snp.leading).offset(10)
+      make.bottom.equalTo(contentView.snp.bottom).offset(-5)
+    }
+    
+    exercisesCount.snp.makeConstraints { make in
+      make.top.equalTo(contentView.snp.top).offset(5)
+      make.trailing.equalTo(contentView.snp.trailing).offset(-10)
+      make.leading.equalTo(weekDeyNum.snp.trailing).offset(10)
+    }
   }
   
   func setupDayCell(dayCell: Day) {
@@ -58,7 +59,7 @@ class DayCell: UITableViewCell {
       let dayName = daysOfWeek[dayIndex]
       weekDeyNum.text = dayName
     } else {
-      weekDeyNum.text = "        "
+      weekDeyNum.text = ""
     }
     self.exercisesCount.text = "Exercises \(dayCell.exercises.count)"
   }

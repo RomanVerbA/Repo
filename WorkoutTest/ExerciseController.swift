@@ -4,7 +4,7 @@
 //
 //  Created by Roman Verba on 07.02.2024.
 //
-
+import SnapKit
 import UIKit
 
 class ExerciseController: UIViewController {
@@ -14,8 +14,8 @@ class ExerciseController: UIViewController {
   private  var timer: Timer?
   private var currentExerciseIndex = 0
   
-  private lazy var nextButtonBottom = nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 100)
-  private lazy var backButtonBottom = backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 100)
+  private var nextButtonBottom: Constraint?
+  private var backButtonBottom: Constraint?
   
   var exercises: [Exercise] = [] {
     didSet {
@@ -88,46 +88,43 @@ class ExerciseController: UIViewController {
     myScrollView.addSubview(descriptionLabel)
     
     myScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 250, right: 0)
-    myScrollView.translatesAutoresizingMaskIntoConstraints = false
-    myImage.translatesAutoresizingMaskIntoConstraints = false
-    nameExercise.translatesAutoresizingMaskIntoConstraints = false
-    descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-    backButton.translatesAutoresizingMaskIntoConstraints = false
-    nextButton.translatesAutoresizingMaskIntoConstraints = false
     
-    NSLayoutConstraint.activate([
-      
-      myScrollView.topAnchor.constraint(equalTo: view.topAnchor),
-      myScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      myScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      myScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-      
-      myImage.topAnchor.constraint(equalTo: myScrollView.contentLayoutGuide.topAnchor, constant: 10),
-      myImage.leadingAnchor.constraint(equalTo: myScrollView.frameLayoutGuide.leadingAnchor, constant: 10),
-      myImage.trailingAnchor.constraint(equalTo: myScrollView.frameLayoutGuide.trailingAnchor, constant: -10),
-      myImage.heightAnchor.constraint(equalToConstant: 350),
-      
-      nameExercise.topAnchor.constraint(equalTo: myImage.bottomAnchor, constant: 10),
-      nameExercise.leadingAnchor.constraint(equalTo: myScrollView.frameLayoutGuide.leadingAnchor, constant: 10),
-      nameExercise.trailingAnchor.constraint(equalTo: myScrollView.frameLayoutGuide.trailingAnchor, constant: -10),
-      
-      
-      descriptionLabel.topAnchor.constraint(equalTo: nameExercise.bottomAnchor, constant: 10),
-      descriptionLabel.leadingAnchor.constraint(equalTo: myScrollView.frameLayoutGuide.leadingAnchor, constant: 10),
-      descriptionLabel.trailingAnchor.constraint(equalTo: myScrollView.frameLayoutGuide.trailingAnchor, constant: -10),
-      descriptionLabel.bottomAnchor.constraint(equalTo: myScrollView.contentLayoutGuide.bottomAnchor),
-      
-      backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-      backButtonBottom,
-      backButton.widthAnchor.constraint(equalToConstant: 100),
-      backButton.heightAnchor.constraint(equalToConstant: 50),
-      
-      nextButton.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: 10),
-      nextButtonBottom,
-      nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-      nextButton.heightAnchor.constraint(equalToConstant: 50),
-      
-    ])
+    myScrollView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
+    }
+    
+    myImage.snp.makeConstraints {
+      $0.top.equalToSuperview().offset(10)
+      $0.leading.equalTo(myScrollView.frameLayoutGuide).offset(10)
+      $0.trailing.equalTo(myScrollView.frameLayoutGuide).offset(-10)
+      $0.height.equalTo(350)
+    }
+    
+    nameExercise.snp.makeConstraints {
+      $0.top.equalTo(myImage.snp.bottom).offset(10)
+      $0.leading.equalTo(myScrollView.frameLayoutGuide).offset(10)
+      $0.trailing.equalTo(myScrollView.frameLayoutGuide).offset(-10)
+    }
+    
+    descriptionLabel.snp.makeConstraints {
+      $0.top.equalTo(nameExercise.snp.bottom).offset(10)
+      $0.leading.equalTo(myScrollView.frameLayoutGuide).offset(10)
+      $0.trailing.equalTo(myScrollView.frameLayoutGuide).offset(-10)
+      $0.bottom.equalToSuperview()
+    }
+    
+    nextButton.snp.makeConstraints {
+      $0.leading.equalTo(backButton.snp.trailing).offset(10)
+      nextButtonBottom = $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(100).constraint
+      $0.trailing.equalToSuperview().offset(-10)
+      $0.height.equalTo(50)
+    }
+    
+    backButton.snp.makeConstraints {
+      $0.leading.equalToSuperview().offset(10)
+      backButtonBottom = $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(100).constraint
+      $0.size.equalTo(CGSize(width: 100, height: 50))
+    }
   }
   
   // MARK: - setupTimerView
@@ -139,16 +136,10 @@ class ExerciseController: UIViewController {
     view.addSubview(timerView)
     timerView.nameLabel.text = exercises.first?.name
     timerView.timerLabel.text = "\(secondRemaining)"
-    timerView.translatesAutoresizingMaskIntoConstraints = false
     
-    NSLayoutConstraint.activate([
-      
-      timerView.topAnchor.constraint(equalTo: view.topAnchor),
-      timerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      timerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      timerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-    ])
-    
+    timerView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
+    }
   }
   
   // MARK: - startTimer
@@ -173,12 +164,12 @@ class ExerciseController: UIViewController {
   }
   
   private func removeTimerView() {
-    
     UIView.animate(withDuration: 1, animations: {
-      self.nextButtonBottom.constant = -10
-      self.backButtonBottom.constant = -10
-      self.timerView?.alpha = 0
+      
+      self.nextButtonBottom?.update(offset: -10)
+      self.backButtonBottom?.update(offset: -10)
       self.view.layoutIfNeeded()
+      self.timerView?.alpha = 0
     }, completion: { finished in
       if finished {
         self.timerView?.removeFromSuperview()
