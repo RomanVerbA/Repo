@@ -12,6 +12,8 @@ class ProgramViewController: UIViewController {
   
   let tableView: UITableView = .init()
   
+  var dataSource: UITableViewDiffableDataSource<Section, Program>?
+  
   var welcome: Welcome?
   
   let repo = JsonRepo()
@@ -29,16 +31,16 @@ class ProgramViewController: UIViewController {
     tableView.backgroundColor = .white
     tableView.register(ProgramCell.self, forCellReuseIdentifier: "ProgramCell")
     tableView.refreshControl = myRefreshControl
-    tableView.dataSource = self
     tableView.delegate = self
     configureTableView()
+    createDataSource()
     refreshData()
   }
   
   @objc func refreshData() {
     repo.load(completion: { [weak self] data in
       self?.welcome = data
-      self?.tableView.reloadData()
+      self?.applySnapshot()
       self?.myRefreshControl.endRefreshing()
     })
   }
@@ -47,32 +49,44 @@ class ProgramViewController: UIViewController {
 extension ProgramViewController {
   func configureTableView() {
     view.addSubview(tableView)
-    tableView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+    tableView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
     }
   }
 }
 
-//MARK: - UITableViewDataSource
+//MARK: - createDataSource & applySnapshot
 
-extension ProgramViewController: UITableViewDataSource {
+extension ProgramViewController {
   
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return welcome?.programs.count ?? 0
+  func createDataSource() {
+    dataSource = UITableViewDiffableDataSource<Section, Program>(tableView: tableView, cellProvider: { tableView, indexPath, program in
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
+      cell.setupProgramCell(programCell: program)
+      return cell
+    })
   }
   
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let programCell = tableView.dequeueReusableCell(withIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
-    guard let program = welcome?.programs[indexPath.row] else { fatalError() }
-    programCell.setupProgramCell(programCell: program)
-    return programCell
+  func applySnapshot() {
+    var snapshot = NSDiffableDataSourceSnapshot<Section, Program>()
+    snapshot.appendSections([.programa])
+    snapshot.appendItems(welcome?.programs ?? [], toSection: .programa)
+    dataSource?.apply(snapshot, animatingDifferences: true)
   }
+  
+  //MARK: - trailingSwipeDelete
   
   func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
     let deleteProgramAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, completion in
+      guard let program = self.dataSource?.itemIdentifier(for: indexPath) else {
+        completion(false)
+        return
+      }
       
+      var snapshot = self.dataSource?.snapshot()
+      snapshot?.deleteItems([program])
+      self.dataSource?.apply(snapshot ?? NSDiffableDataSourceSnapshot<Section, Program>(), animatingDifferences: true)
       self.welcome?.programs.remove(at: indexPath.row)
-      tableView.deleteRows(at: [indexPath], with: .automatic)
       completion(true)
     }
     
@@ -80,9 +94,10 @@ extension ProgramViewController: UITableViewDataSource {
     deleteProgramAction.image = UIImage(named: "delete")
     return UISwipeActionsConfiguration(actions: [deleteProgramAction])
   }
-  
-  //MARK: - UITableViewDelegate
 }
+
+//MARK: - UITableViewDelegate
+
 extension ProgramViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
@@ -98,7 +113,6 @@ extension ProgramViewController: UITableViewDelegate {
   
   func deleteProgram(at index: Int) {
     welcome?.programs.remove(at: index)
-    tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .left)
-    tableView.reloadData()
+    applySnapshot()
   }
 }
