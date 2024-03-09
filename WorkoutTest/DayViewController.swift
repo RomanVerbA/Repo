@@ -12,6 +12,8 @@ class DayViewController: UIViewController {
   
   var tableView = UITableView .init()
   
+  var dataSource: UITableViewDiffableDataSource<Section, Day>?
+  
   var confirmDelete: (() -> Void)?
   
   var program: Program?
@@ -22,6 +24,8 @@ class DayViewController: UIViewController {
     view.backgroundColor = .white
     title = "Days"
     configureView()
+    configureDataSource()
+    applySnapshot()
     
     let trashButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(showActionSheet))
     navigationItem.rightBarButtonItem = trashButton
@@ -29,10 +33,7 @@ class DayViewController: UIViewController {
     tableView.register(DayCell.self, forCellReuseIdentifier: "dayCell")
     tableView.register(DescriptCell.self, forCellReuseIdentifier: "descriptCell")
     tableView.register(ImageCell.self, forCellReuseIdentifier: "imageCell")
-    
-    tableView.dataSource = self
     tableView.delegate = self
-    
   }
   
   func configureView() {
@@ -43,34 +44,43 @@ class DayViewController: UIViewController {
     }
   }
 }
-//MARK: - UITableViewDataSource
+//MARK: - configureDataSource
 
-extension DayViewController: UITableViewDataSource {
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return staticCellsCount + (program?.days.count)!
-  }
+extension DayViewController {
   
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
-    if indexPath.row == 0 {
-      let imageCell = tableView.dequeueReusableCell(withIdentifier: "imageCell", for: indexPath) as! ImageCell
-      imageCell.setupImageCell(with: "1")
-      return imageCell
-    }
-    
-    else if indexPath.row == 1 {
-      let descriptionCell = tableView.dequeueReusableCell(withIdentifier: "descriptCell", for: indexPath) as!
-      DescriptCell
-      guard let description = program?.descriptionText else { fatalError() }
-      descriptionCell.descriptionText.text = description.description
-      return descriptionCell
+  func configureDataSource() {
+    dataSource = UITableViewDiffableDataSource<Section, Day>(tableView: tableView) { [self] tableView, indexPath, day in
       
-    }else{
-      let dayCell = tableView.dequeueReusableCell(withIdentifier: "dayCell", for: indexPath) as! DayCell
-      guard let day = program?.days[indexPath.row-staticCellsCount] else { fatalError() }
-      dayCell.setupDayCell(dayCell: day)
-      return dayCell
+      if indexPath.row == 0 {
+        let imageCell = tableView.dequeueReusableCell(withIdentifier: "imageCell", for: indexPath) as! ImageCell
+        imageCell.setupImageCell(with: "1")
+        return imageCell
+      }
+      
+      else if indexPath.row == 1 {
+        let descriptionCell = tableView.dequeueReusableCell(withIdentifier: "descriptCell", for: indexPath) as!
+        DescriptCell
+        guard let description = program?.descriptionText else { fatalError() }
+        descriptionCell.descriptionText.text = description.description
+        return descriptionCell
+        
+      }else{
+        let dayCell = tableView.dequeueReusableCell(withIdentifier: "dayCell", for: indexPath) as! DayCell
+        guard let day = program?.days[indexPath.row - staticCellsCount] else { fatalError() }
+        dayCell.setupDayCell(dayCell: day)
+        return dayCell
+      }
     }
+  }
+  //MARK: - applySnapshot
+  
+  func applySnapshot() {
+    var snapshot = NSDiffableDataSourceSnapshot<Section, Day>()
+    snapshot.appendSections([.main])
+    snapshot.appendItems([Day(weekDayNum: 0, exercises: [])])
+    snapshot.appendItems([Day(weekDayNum: 1, exercises: [])])
+    snapshot.appendItems(program?.days ?? [], toSection: .main)
+    dataSource?.apply(snapshot, animatingDifferences: true)
   }
 }
 
