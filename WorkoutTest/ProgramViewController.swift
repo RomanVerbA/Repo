@@ -69,8 +69,9 @@ extension ProgramViewController {
   
   func applySnapshot() {
     var snapshot = NSDiffableDataSourceSnapshot<Section, Program>()
-    snapshot.appendSections([.programa])
-    snapshot.appendItems(welcome?.programs ?? [], toSection: .programa)
+    snapshot.appendSections([.program])
+    snapshot.appendItems(welcome?.programs ?? [], toSection: .program)
+    dataSource?.defaultRowAnimation = .right
     dataSource?.apply(snapshot, animatingDifferences: true)
   }
   
