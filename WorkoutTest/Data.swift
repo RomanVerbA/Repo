@@ -8,25 +8,25 @@
 import Foundation
 
 // MARK: - Welcome
-struct Welcome: Codable {
+struct Welcome: Codable, Hashable {
   var programs: [Program]
 }
 
 // MARK: - Program
-struct Program: Codable {
+struct Program: Codable, Hashable {
   let difficulty: Int
   let name, descriptionText, programType: String
   let days: [Day]
 }
 
 // MARK: - Day
-struct Day: Codable {
+struct Day: Codable, Hashable {
   let weekDayNum: Int
   let exercises: [Exercise]
 }
 
 // MARK: - Exercise
-struct Exercise: Codable {
+struct Exercise: Codable, Hashable{
   let countingNumber: Int
   let imageName, name: String
   let exDescription: ExDescription
@@ -35,7 +35,7 @@ struct Exercise: Codable {
 }
 
 // MARK: - ExDescription
-struct ExDescription: Codable {
+struct ExDescription: Codable, Hashable {
   let gifImageName: String
   let musclesWorked: [String]
   let primaryType, technique: String
@@ -43,11 +43,16 @@ struct ExDescription: Codable {
 }
 
 // MARK: - SetOfMuscle
-struct SetOfMuscle: Codable {
+struct SetOfMuscle: Codable, Hashable{
   let nameOfMuscleSet: String
 }
 
 // MARK: - Set
-struct Set: Codable {
+struct Set: Codable, Hashable {
   let countingNumber, numberOfReps: Int
+}
+
+enum Section: Hashable {
+  case program
+  case main
 }
