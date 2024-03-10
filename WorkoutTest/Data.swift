@@ -52,7 +52,3 @@ struct Set: Codable, Hashable {
   let countingNumber, numberOfReps: Int
 }
 
-enum Section: Hashable {
-  case program
-  case main
-}
