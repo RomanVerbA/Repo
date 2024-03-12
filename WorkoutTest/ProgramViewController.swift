@@ -8,11 +8,26 @@
 import UIKit
 import SnapKit
 
-class ProgramViewController: UIViewController {
+typealias ProgramListDataSource = UITableViewDiffableDataSource<ProgramViewController.ProgramListSection, Program>
+
+final class ProgramViewController: UIViewController {
+  enum ProgramListSection: Hashable {
+    case programs
+  }
   
   let tableView: UITableView = .init()
   
-  var welcome: Welcome?
+  private lazy var dataSource: ProgramListDataSource = {
+    let dataSource = ProgramListDataSource (tableView: tableView, cellProvider: { tableView, indexPath, program in
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
+      cell.setupProgramCell(programCell: program)
+      return cell
+    })
+    dataSource.defaultRowAnimation = .right
+    return dataSource
+  }()
+  
+  private var welcome: Welcome?
   
   let repo = JsonRepo()
   
@@ -29,50 +44,51 @@ class ProgramViewController: UIViewController {
     tableView.backgroundColor = .white
     tableView.register(ProgramCell.self, forCellReuseIdentifier: "ProgramCell")
     tableView.refreshControl = myRefreshControl
-    tableView.dataSource = self
     tableView.delegate = self
     configureTableView()
     refreshData()
   }
   
-  @objc func refreshData() {
+  @objc private func refreshData() {
     repo.load(completion: { [weak self] data in
       self?.welcome = data
-      self?.tableView.reloadData()
+      self?.applySnapshot()
       self?.myRefreshControl.endRefreshing()
     })
   }
 }
 
 extension ProgramViewController {
-  func configureTableView() {
+  private func configureTableView() {
     view.addSubview(tableView)
-    tableView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+    tableView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
     }
   }
 }
 
-//MARK: - UITableViewDataSource
+//MARK: - applySnapshot
 
-extension ProgramViewController: UITableViewDataSource {
+extension ProgramViewController {
   
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return welcome?.programs.count ?? 0
+  private func applySnapshot() {
+    var snapshot = NSDiffableDataSourceSnapshot<ProgramListSection, Program>()
+    snapshot.appendSections([.programs])
+    snapshot.appendItems(welcome?.programs ?? [], toSection: .programs)
+    dataSource.apply(snapshot, animatingDifferences: true)
   }
   
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let programCell = tableView.dequeueReusableCell(withIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
-    guard let program = welcome?.programs[indexPath.row] else { fatalError() }
-    programCell.setupProgramCell(programCell: program)
-    return programCell
-  }
+  //MARK: - trailingSwipeDelete
   
   func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
     let deleteProgramAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, completion in
+      guard self.dataSource.itemIdentifier(for: indexPath) != nil else {
+        completion(false)
+        return
+      }
       
       self.welcome?.programs.remove(at: indexPath.row)
-      tableView.deleteRows(at: [indexPath], with: .automatic)
+      self.applySnapshot()
       completion(true)
     }
     
@@ -80,9 +96,10 @@ extension ProgramViewController: UITableViewDataSource {
     deleteProgramAction.image = UIImage(named: "delete")
     return UISwipeActionsConfiguration(actions: [deleteProgramAction])
   }
-  
-  //MARK: - UITableViewDelegate
 }
+
+//MARK: - UITableViewDelegate
+
 extension ProgramViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
@@ -96,9 +113,8 @@ extension ProgramViewController: UITableViewDelegate {
   }
   // MARK: - Function for deleting a cell
   
-  func deleteProgram(at index: Int) {
+  private func deleteProgram(at index: Int) {
     welcome?.programs.remove(at: index)
-    tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .left)
-    tableView.reloadData()
+    applySnapshot()
   }
 }
