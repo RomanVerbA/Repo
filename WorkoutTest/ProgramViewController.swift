@@ -8,22 +8,21 @@
 import UIKit
 import SnapKit
 
-typealias ProgramListDataSource = UITableViewDiffableDataSource<ProgramViewController.ProgramListSection, Program>
+typealias ProgramListDataSource = UICollectionViewDiffableDataSource<ProgramViewController.ProgramListSection, Program>
 
 final class ProgramViewController: UIViewController {
   enum ProgramListSection: Hashable {
     case programs
   }
   
-  let tableView: UITableView = .init()
+  var collectionView: UICollectionView!
   
   private lazy var dataSource: ProgramListDataSource = {
-    let dataSource = ProgramListDataSource (tableView: tableView, cellProvider: { tableView, indexPath, program in
-      guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
+    let dataSource = ProgramListDataSource (collectionView: collectionView, cellProvider: { collectionView, indexPath, program in
+      guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
       cell.setupProgramCell(programCell: program)
       return cell
     })
-    dataSource.defaultRowAnimation = .right
     return dataSource
   }()
   
@@ -40,12 +39,7 @@ final class ProgramViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     title = "Programs"
-    
-    tableView.backgroundColor = .white
-    tableView.register(ProgramCell.self, forCellReuseIdentifier: "ProgramCell")
-    tableView.refreshControl = myRefreshControl
-    tableView.delegate = self
-    configureTableView()
+    configureCollectionView()
     refreshData()
   }
   
@@ -58,14 +52,30 @@ final class ProgramViewController: UIViewController {
   }
 }
 
-extension ProgramViewController {
-  private func configureTableView() {
-    view.addSubview(tableView)
-    tableView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
-    }
+private extension ProgramViewController {
+  func configureCollectionView() {
+    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: setupLayout())
+    view.addSubview(collectionView)
+    collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    collectionView.register(ProgramCell.self, forCellWithReuseIdentifier: "ProgramCell")
+    collectionView.delegate = self
+    collectionView.refreshControl = myRefreshControl
   }
 }
+
+private extension ProgramViewController {
+  func setupLayout() -> UICollectionViewLayout {
+    let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0))
+    let item = NSCollectionLayoutItem(layoutSize: itemSize)
+    item.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1)
+    let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(200))
+    let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
+    let section = NSCollectionLayoutSection(group: group)
+    let layout = UICollectionViewCompositionalLayout(section: section)
+    return layout
+  }
+}
+
 
 //MARK: - applySnapshot
 
@@ -80,7 +90,7 @@ extension ProgramViewController {
   
   //MARK: - trailingSwipeDelete
   
-  func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+  func collectionView(_ collectionView: UICollectionView, trailingSwipeActionsConfigurationForItemAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
     let deleteProgramAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, completion in
       guard self.dataSource.itemIdentifier(for: indexPath) != nil else {
         completion(false)
@@ -100,9 +110,9 @@ extension ProgramViewController {
 
 //MARK: - UITableViewDelegate
 
-extension ProgramViewController: UITableViewDelegate {
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    tableView.deselectRow(at: indexPath, animated: true)
+extension ProgramViewController: UICollectionViewDelegate {
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    collectionView.deselectItem(at: indexPath, animated: true)
     let selectedProgram = welcome?.programs[indexPath.row]
     let vc = DayViewController()
     vc.program = selectedProgram
