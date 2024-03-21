@@ -16,6 +16,7 @@ final class ProgramViewController: UIViewController {
   }
   
   var collectionView: UICollectionView!
+  var searchBar: UISearchBar!
   
   private lazy var dataSource: ProgramListDataSource = {
     let dataSource = ProgramListDataSource (collectionView: collectionView, cellProvider: { collectionView, indexPath, program in
@@ -30,7 +31,7 @@ final class ProgramViewController: UIViewController {
   
   let repo = JsonRepo()
   
-  let myRefreshControl: UIRefreshControl = {
+  private lazy var myRefreshControl: UIRefreshControl = {
     let refreshControl = UIRefreshControl()
     refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
     return refreshControl
@@ -39,6 +40,7 @@ final class ProgramViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     title = "Programs"
+    configureSearchBar()
     configureCollectionView()
     refreshData()
   }
@@ -50,7 +52,16 @@ final class ProgramViewController: UIViewController {
       self?.myRefreshControl.endRefreshing()
     })
   }
+  
+  private func configureSearchBar() {
+    searchBar = UISearchBar()
+    searchBar.placeholder = "Search Programs"
+    searchBar.delegate = self
+    navigationItem.titleView = searchBar
+  }
 }
+
+//MARK: - configureCollectionViev + setupLayout
 
 private extension ProgramViewController {
   func configureCollectionView() {
@@ -105,6 +116,31 @@ extension ProgramViewController {
     deleteProgramAction.backgroundColor = .orange
     deleteProgramAction.image = UIImage(named: "delete")
     return UISwipeActionsConfiguration(actions: [deleteProgramAction])
+  }
+}
+
+//MARK: - UISearchBarDelegate
+
+extension ProgramViewController: UISearchBarDelegate{
+  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    filterPrograms(with: searchText)
+  }
+  
+  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    searchBar.text = ""
+    searchBar.resignFirstResponder()
+    applySnapshot()
+  }
+  
+  private func filterPrograms(with searchText: String) {
+    let filteredPrograms = welcome?.programs.filter({
+      searchText.isEmpty || $0.name.lowercased().contains(searchText.lowercased())
+    }) ?? []
+    
+    var snapShot = NSDiffableDataSourceSnapshot<ProgramListSection,Program>()
+    snapShot.appendSections([.programs])
+    snapShot.appendItems(filteredPrograms, toSection:.programs)
+    dataSource.apply(snapShot, animatingDifferences: true)
   }
 }
 
