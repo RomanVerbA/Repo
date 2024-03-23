@@ -15,8 +15,17 @@ final class ProgramViewController: UIViewController {
     case programs
   }
   
-  var collectionView: UICollectionView!
-  var searchBar: UISearchBar!
+  private lazy var collectionView: UICollectionView = {
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.createLayout())
+    collectionView.register(ProgramCell.self, forCellWithReuseIdentifier: "ProgramCell")
+    return collectionView
+  }()
+  
+  private let searchBar: UISearchBar = {
+    let searchBar = UISearchBar()
+    searchBar.placeholder = "Search Programs"
+    return searchBar
+  }()
   
   private lazy var dataSource: ProgramListDataSource = {
     let dataSource = ProgramListDataSource (collectionView: collectionView, cellProvider: { collectionView, indexPath, program in
@@ -46,6 +55,11 @@ final class ProgramViewController: UIViewController {
   }
   
   @objc private func refreshData() {
+    guard searchBar.text?.isEmpty ?? true else {
+      self.myRefreshControl.endRefreshing()
+      return
+    }
+    
     repo.load(completion: { [weak self] data in
       self?.welcome = data
       self?.applySnapshot()
@@ -54,28 +68,23 @@ final class ProgramViewController: UIViewController {
   }
   
   private func configureSearchBar() {
-    searchBar = UISearchBar()
-    searchBar.placeholder = "Search Programs"
     searchBar.delegate = self
     navigationItem.titleView = searchBar
   }
 }
 
-//MARK: - configureCollectionViev + setupLayout
-
 private extension ProgramViewController {
+  
   func configureCollectionView() {
-    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: setupLayout())
     view.addSubview(collectionView)
-    collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    collectionView.register(ProgramCell.self, forCellWithReuseIdentifier: "ProgramCell")
+    collectionView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
+    }
     collectionView.delegate = self
     collectionView.refreshControl = myRefreshControl
   }
-}
-
-private extension ProgramViewController {
-  func setupLayout() -> UICollectionViewLayout {
+  
+  func createLayout() -> UICollectionViewLayout {
     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0))
     let item = NSCollectionLayoutItem(layoutSize: itemSize)
     item.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1)
@@ -86,7 +95,6 @@ private extension ProgramViewController {
     return layout
   }
 }
-
 
 //MARK: - applySnapshot
 
@@ -121,7 +129,7 @@ extension ProgramViewController {
 
 //MARK: - UISearchBarDelegate
 
-extension ProgramViewController: UISearchBarDelegate{
+extension ProgramViewController: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     filterPrograms(with: searchText)
   }
