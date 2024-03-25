@@ -15,6 +15,9 @@ final class ProgramViewController: UIViewController {
     case programs
   }
   
+  var favoritePrograms:[Program] = []
+  var isShowingFavorites: Bool = false
+  
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.createLayout())
     collectionView.register(ProgramCell.self, forCellWithReuseIdentifier: "ProgramCell")
@@ -31,6 +34,10 @@ final class ProgramViewController: UIViewController {
     let dataSource = ProgramListDataSource (collectionView: collectionView, cellProvider: { collectionView, indexPath, program in
       guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
       cell.setupProgramCell(programCell: program)
+      cell.favoriteButtonAction = {
+        guard let program = self.dataSource.itemIdentifier(for: indexPath) else {return}
+        self.toggleFavorite(program: program)
+      }
       return cell
     })
     return dataSource
@@ -49,6 +56,7 @@ final class ProgramViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     title = "Programs"
+    configureFavoriteButton()
     configureSearchBar()
     configureCollectionView()
     refreshData()
@@ -62,6 +70,7 @@ final class ProgramViewController: UIViewController {
     
     repo.load(completion: { [weak self] data in
       self?.welcome = data
+      self?.showFavoritePrograms()
       self?.applySnapshot()
       self?.myRefreshControl.endRefreshing()
     })
@@ -70,6 +79,12 @@ final class ProgramViewController: UIViewController {
   private func configureSearchBar() {
     searchBar.delegate = self
     navigationItem.titleView = searchBar
+  }
+  
+  private func configureFavoriteButton() {
+    let favoriteButton = UIBarButtonItem(image: UIImage(systemName: "heart.fill"), style: .plain, target: self, action: #selector(showFavoritePrograms))
+    favoriteButton.tintColor = .systemBlue
+    navigationItem.rightBarButtonItem = favoriteButton
   }
 }
 
@@ -149,6 +164,32 @@ extension ProgramViewController: UISearchBarDelegate {
     snapShot.appendSections([.programs])
     snapShot.appendItems(filteredPrograms, toSection:.programs)
     dataSource.apply(snapShot, animatingDifferences: true)
+  }
+}
+
+//MARK: - Favorites
+
+extension ProgramViewController {
+  private func toggleFavorite(program: Program) {
+    if favoritePrograms.contains(program) {
+      favoritePrograms.removeAll{$0 == program}
+    }else{
+      favoritePrograms.append(program)
+    }
+    applySnapshot()
+  }
+  
+  @objc private func showFavoritePrograms() {
+    if isShowingFavorites {
+      isShowingFavorites = false
+      applySnapshot()
+    } else {
+      var snapshot = NSDiffableDataSourceSnapshot<ProgramListSection, Program>()
+      snapshot.appendSections([.programs])
+      snapshot.appendItems(favoritePrograms, toSection: .programs)
+      dataSource.apply(snapshot, animatingDifferences: true)
+      isShowingFavorites = true
+    }
   }
 }
 
