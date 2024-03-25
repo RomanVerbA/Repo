@@ -10,6 +10,16 @@ import SnapKit
 
 class ProgramCell: UICollectionViewCell {
   
+  var favoriteButtonAction:(() -> Void)?
+  
+  lazy var favoriteButton: UIButton = {
+    let button = UIButton()
+    button.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+    button.tintColor = .white
+    button.addTarget(self, action:#selector(favoriteButtonTapped),for:.touchUpInside)
+    return button
+  }()
+  
   let difficultyLabel: UILabel = {
     let difficulty = UILabel()
     difficulty.font = UIFont.systemFont(ofSize: 13)
@@ -57,8 +67,14 @@ class ProgramCell: UICollectionViewCell {
     fatalError("init(coder:) has not been implemented")
   }
   
+  @objc private func favoriteButtonTapped() {
+    favoriteButtonAction?()
+    favoriteButton.tintColor = favoriteButton.tintColor == .white ? .red: .white
+  }
+  
+  
   private func layoutCell() {
-    [programImageView, difficultyLabel, nameLabel, descriprionLabel, programType].forEach {
+    [programImageView, difficultyLabel, nameLabel, descriprionLabel, programType, favoriteButton].forEach {
       contentView.addSubview($0)
     }
     
@@ -89,6 +105,11 @@ class ProgramCell: UICollectionViewCell {
     
     programImageView.snp.makeConstraints {
       $0.edges.equalToSuperview()
+    }
+    
+    favoriteButton.snp.makeConstraints {
+      $0.top.equalTo(contentView.snp.top).offset(5)
+      $0.trailing.equalTo(contentView.snp.trailing).offset(-5)
     }
   }
   
