@@ -67,6 +67,11 @@ class ProgramCell: UICollectionViewCell {
     fatalError("init(coder:) has not been implemented")
   }
   
+  override func prepareForReuse() {
+    super.prepareForReuse()
+    favoriteButtonAction = nil
+  }
+  
   @objc private func favoriteButtonTapped() {
     favoriteButtonAction?()
     favoriteButton.tintColor = favoriteButton.tintColor == .white ? .red: .white

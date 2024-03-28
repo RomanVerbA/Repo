@@ -15,8 +15,9 @@ final class ProgramViewController: UIViewController {
     case programs
   }
   
-  var favoritePrograms:[Program] = []
-  var isShowingFavorites: Bool = false
+  private var searchText: String?
+  private var favoritePrograms:[String] = []
+  private var isShowingFavorites: Bool = false
   
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.createLayout())
@@ -35,7 +36,6 @@ final class ProgramViewController: UIViewController {
       guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
       cell.setupProgramCell(programCell: program)
       cell.favoriteButtonAction = {
-        guard let program = self.dataSource.itemIdentifier(for: indexPath) else {return}
         self.toggleFavorite(program: program)
       }
       return cell
@@ -70,7 +70,6 @@ final class ProgramViewController: UIViewController {
     
     repo.load(completion: { [weak self] data in
       self?.welcome = data
-      self?.showFavoritePrograms()
       self?.applySnapshot()
       self?.myRefreshControl.endRefreshing()
     })
@@ -83,7 +82,7 @@ final class ProgramViewController: UIViewController {
   
   private func configureFavoriteButton() {
     let favoriteButton = UIBarButtonItem(image: UIImage(systemName: "heart.fill"), style: .plain, target: self, action: #selector(showFavoritePrograms))
-    favoriteButton.tintColor = .systemBlue
+    favoriteButton.tintColor = isShowingFavorites ? .red : .systemBlue
     navigationItem.rightBarButtonItem = favoriteButton
   }
 }
@@ -116,9 +115,19 @@ private extension ProgramViewController {
 extension ProgramViewController {
   
   private func applySnapshot() {
+    var data = welcome?.programs ?? []
+    
+    if let searchText = searchText {
+      data = data.filter { program in program.name.contains(searchText) }
+    }
+    
+    if isShowingFavorites {
+      data = data.filter { program in favoritePrograms.contains(program.name) }
+    }
+    
     var snapshot = NSDiffableDataSourceSnapshot<ProgramListSection, Program>()
     snapshot.appendSections([.programs])
-    snapshot.appendItems(welcome?.programs ?? [], toSection: .programs)
+    snapshot.appendItems(data, toSection: .programs)
     dataSource.apply(snapshot, animatingDifferences: true)
   }
   
@@ -146,7 +155,8 @@ extension ProgramViewController {
 
 extension ProgramViewController: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    filterPrograms(with: searchText)
+    self.searchText = searchText.isEmpty ? nil : searchText
+    applySnapshot()
   }
   
   func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -154,42 +164,24 @@ extension ProgramViewController: UISearchBarDelegate {
     searchBar.resignFirstResponder()
     applySnapshot()
   }
-  
-  private func filterPrograms(with searchText: String) {
-    let filteredPrograms = welcome?.programs.filter({
-      searchText.isEmpty || $0.name.lowercased().contains(searchText.lowercased())
-    }) ?? []
-    
-    var snapShot = NSDiffableDataSourceSnapshot<ProgramListSection,Program>()
-    snapShot.appendSections([.programs])
-    snapShot.appendItems(filteredPrograms, toSection:.programs)
-    dataSource.apply(snapShot, animatingDifferences: true)
-  }
 }
 
 //MARK: - Favorites
 
 extension ProgramViewController {
   private func toggleFavorite(program: Program) {
-    if favoritePrograms.contains(program) {
-      favoritePrograms.removeAll{$0 == program}
+    if favoritePrograms.contains(program.name) {
+      favoritePrograms.removeAll{$0 == program.name}
     }else{
-      favoritePrograms.append(program)
+      favoritePrograms.append(program.name)
     }
     applySnapshot()
   }
   
   @objc private func showFavoritePrograms() {
-    if isShowingFavorites {
-      isShowingFavorites = false
-      applySnapshot()
-    } else {
-      var snapshot = NSDiffableDataSourceSnapshot<ProgramListSection, Program>()
-      snapshot.appendSections([.programs])
-      snapshot.appendItems(favoritePrograms, toSection: .programs)
-      dataSource.apply(snapshot, animatingDifferences: true)
-      isShowingFavorites = true
-    }
+    isShowingFavorites.toggle()
+    applySnapshot()
+    configureFavoriteButton()
   }
 }
 
