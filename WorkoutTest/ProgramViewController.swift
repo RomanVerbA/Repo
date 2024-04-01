@@ -18,7 +18,9 @@ final class ProgramViewController: UIViewController {
   private var searchText: String?
   private var favoritePrograms:[String] = []
   private var isShowingFavorites: Bool = false
-  
+ // private let storage: StorageManagerProtocol = StorageManager()
+  private let userDefaults = UserDefaults.standard
+
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.createLayout())
     collectionView.register(ProgramCell.self, forCellWithReuseIdentifier: "ProgramCell")
@@ -59,6 +61,7 @@ final class ProgramViewController: UIViewController {
     configureFavoriteButton()
     configureSearchBar()
     configureCollectionView()
+    loadFavoritePrograms()
     refreshData()
   }
   
@@ -175,6 +178,7 @@ extension ProgramViewController {
     }else{
       favoritePrograms.append(program.name)
     }
+    saveFavoritePrograms()
     applySnapshot()
   }
   
@@ -204,4 +208,16 @@ extension ProgramViewController: UICollectionViewDelegate {
     welcome?.programs.remove(at: index)
     applySnapshot()
   }
+}
+
+extension ProgramViewController {
+    private func saveFavoritePrograms() {
+        UserDefaults.standard.set(favoritePrograms, forKey: "FavoritePrograms")
+    }
+    
+    private func loadFavoritePrograms() {
+        if let savedFavorites = UserDefaults.standard.stringArray(forKey: "FavoritePrograms") {
+            favoritePrograms = savedFavorites
+        }
+    }
 }
