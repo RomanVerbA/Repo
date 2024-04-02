@@ -118,11 +118,14 @@ class ProgramCell: UICollectionViewCell {
     }
   }
   
-  func setupProgramCell(programCell: Program) {
+  func setupProgramCell(programCell: Program, isFavorite: Bool) {
     self.nameLabel.text = programCell.name
     self.descriprionLabel.text = programCell.descriptionText
     self.programType.text = programCell.programType
     self.difficultyLabel.text = " Difficulty \(programCell.difficulty)"
-    self.programImageView.image = UIImage.init(named: "image1")
+    self.programImageView.image = UIImage(named: "image1")
+    
+    let heartColor: UIColor = isFavorite ? .red : .white
+    self.favoriteButton.tintColor = heartColor
   }
 }

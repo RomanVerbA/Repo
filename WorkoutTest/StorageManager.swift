@@ -24,8 +24,6 @@ protocol StorageManagerProtocol {
 final class StorageManager {
   public enum Keys: String {
     case favoritePrograms
-    case favoriteButtonState
-    
   }
   
   private let userDefaults = UserDefaults.standard
