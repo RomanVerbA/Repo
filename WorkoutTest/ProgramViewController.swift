@@ -18,9 +18,8 @@ final class ProgramViewController: UIViewController {
   private var searchText: String?
   private var favoritePrograms:[String] = []
   private var isShowingFavorites: Bool = false
- // private let storage: StorageManagerProtocol = StorageManager()
-  private let userDefaults = UserDefaults.standard
-
+  private let storage: StorageManagerProtocol = StorageManager()
+  
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.createLayout())
     collectionView.register(ProgramCell.self, forCellWithReuseIdentifier: "ProgramCell")
@@ -36,7 +35,8 @@ final class ProgramViewController: UIViewController {
   private lazy var dataSource: ProgramListDataSource = {
     let dataSource = ProgramListDataSource (collectionView: collectionView, cellProvider: { collectionView, indexPath, program in
       guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
-      cell.setupProgramCell(programCell: program)
+      let isFavorite = self.favoritePrograms.contains(program.name)
+      cell.setupProgramCell(programCell: program, isFavorite: isFavorite)
       cell.favoriteButtonAction = {
         self.toggleFavorite(program: program)
       }
@@ -211,13 +211,13 @@ extension ProgramViewController: UICollectionViewDelegate {
 }
 
 extension ProgramViewController {
-    private func saveFavoritePrograms() {
-        UserDefaults.standard.set(favoritePrograms, forKey: "FavoritePrograms")
+  private func saveFavoritePrograms() {
+    storage.set(favoritePrograms, forKey: .favoritePrograms)
+  }
+  
+  private func loadFavoritePrograms() {
+    if let savedFavorites = storage.array(forKey: .favoritePrograms) {
+      favoritePrograms = savedFavorites
     }
-    
-    private func loadFavoritePrograms() {
-        if let savedFavorites = UserDefaults.standard.stringArray(forKey: "FavoritePrograms") {
-            favoritePrograms = savedFavorites
-        }
-    }
+  }
 }
