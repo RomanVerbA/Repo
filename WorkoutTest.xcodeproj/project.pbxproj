@@ -25,6 +25,8 @@
 		923D5F8A2B88E5EF00F699DB /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 923D5F892B88E5EF00F699DB /* FirebaseFirestore */; };
 		923D5F8C2B88E5EF00F699DB /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 923D5F8B2B88E5EF00F699DB /* FirebaseStorage */; };
 		923D5F952B8A690000F699DB /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 923D5F942B8A690000F699DB /* SnapKit */; };
+		92A231602BBA9EF2001F53D6 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 92A2315F2BBA9EF2001F53D6 /* SDWebImage */; };
+		92A231632BBAA34E001F53D6 /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 92A231622BBAA34E001F53D6 /* SDWebImageWebPCoder */; };
 		92AC7B9D2B7381600063D7D9 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AC7B9C2B7381600063D7D9 /* TimerView.swift */; };
 		92AC7B9F2B738F6E0063D7D9 /* ExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AC7B9E2B738F6E0063D7D9 /* ExerciseController.swift */; };
 /* End PBXBuildFile section */
@@ -54,6 +56,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92A231632BBAA34E001F53D6 /* SDWebImageWebPCoder in Frameworks */,
+				92A231602BBA9EF2001F53D6 /* SDWebImage in Frameworks */,
 				923D5F882B88E5EF00F699DB /* FirebaseDatabase in Frameworks */,
 				923D5F8C2B88E5EF00F699DB /* FirebaseStorage in Frameworks */,
 				923D5F862B88E5EF00F699DB /* FirebaseAuth in Frameworks */,
@@ -166,6 +170,8 @@
 				923D5F892B88E5EF00F699DB /* FirebaseFirestore */,
 				923D5F8B2B88E5EF00F699DB /* FirebaseStorage */,
 				923D5F942B8A690000F699DB /* SnapKit */,
+				92A2315F2BBA9EF2001F53D6 /* SDWebImage */,
+				92A231622BBAA34E001F53D6 /* SDWebImageWebPCoder */,
 			);
 			productName = WorkoutTest;
 			productReference = 922C5CD22B5BEAC900EF2975 /* WorkoutTest.app */;
@@ -198,6 +204,8 @@
 			packageReferences = (
 				923D5F842B88E5EF00F699DB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				923D5F932B8A690000F699DB /* XCRemoteSwiftPackageReference "SnapKit" */,
+				92A2315E2BBA9EF2001F53D6 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				92A231612BBAA34E001F53D6 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */,
 			);
 			productRefGroup = 922C5CD32B5BEAC900EF2975 /* Products */;
 			projectDirPath = "";
@@ -465,6 +473,22 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		92A2315E2BBA9EF2001F53D6 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
+		92A231612BBAA34E001F53D6 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageWebPCoder.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -492,6 +516,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 923D5F932B8A690000F699DB /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		92A2315F2BBA9EF2001F53D6 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92A2315E2BBA9EF2001F53D6 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+		92A231622BBAA34E001F53D6 /* SDWebImageWebPCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92A231612BBAA34E001F53D6 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */;
+			productName = SDWebImageWebPCoder;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

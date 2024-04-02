@@ -83,6 +83,15 @@
         }
       },
       {
+        "package": "libwebp",
+        "repositoryURL": "https://github.com/SDWebImage/libwebp-Xcode.git",
+        "state": {
+          "branch": null,
+          "revision": "b2b1d20a90b14d11f6ef4241da6b81c1d3f171e4",
+          "version": "1.3.2"
+        }
+      },
+      {
         "package": "nanopb",
         "repositoryURL": "https://github.com/firebase/nanopb.git",
         "state": {
@@ -98,6 +107,24 @@
           "branch": null,
           "revision": "540318ecedd63d883069ae7f1ed811a2df00b6ac",
           "version": "2.4.0"
+        }
+      },
+      {
+        "package": "SDWebImage",
+        "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
+        "state": {
+          "branch": null,
+          "revision": "f6afa0132961d593f07970d84e2d8b588c29ea04",
+          "version": "5.19.1"
+        }
+      },
+      {
+        "package": "SDWebImageWebPCoder",
+        "repositoryURL": "https://github.com/SDWebImage/SDWebImageWebPCoder.git",
+        "state": {
+          "branch": null,
+          "revision": "8a33fb3ca75a01267f775f891f7d61f675e95072",
+          "version": "0.14.5"
         }
       },
       {

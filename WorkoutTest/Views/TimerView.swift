@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import SDWebImage
 
 class TimerView: UIView {
   
@@ -47,7 +48,7 @@ class TimerView: UIView {
   
   private let exerciseImage: UIImageView = {
     var image = UIImageView()
-    image.image = UIImage(named: "1")
+    image.sd_setImage(with: URL(string:"https://www.dropbox.com/scl/fi/ydo7b3tnyld5mjefmbehk/leg-press.gif?rlkey=tia40lr6emck74o7nlawxnw7r&dl=1"), placeholderImage: UIImage(named: "leg-press"))
     return image
   }()
   
