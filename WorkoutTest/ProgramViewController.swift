@@ -175,7 +175,7 @@ extension ProgramViewController {
   private func toggleFavorite(program: Program) {
     if favoritePrograms.contains(program.name) {
       favoritePrograms.removeAll{$0 == program.name}
-    }else{
+    } else {
       favoritePrograms.append(program.name)
     }
     saveFavoritePrograms()
