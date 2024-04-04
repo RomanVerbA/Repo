@@ -25,8 +25,12 @@
 		923D5F8A2B88E5EF00F699DB /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 923D5F892B88E5EF00F699DB /* FirebaseFirestore */; };
 		923D5F8C2B88E5EF00F699DB /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 923D5F8B2B88E5EF00F699DB /* FirebaseStorage */; };
 		923D5F952B8A690000F699DB /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 923D5F942B8A690000F699DB /* SnapKit */; };
+
+		92A2315D2BB816C6001F53D6 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A2315C2BB816C6001F53D6 /* StorageManager.swift */; };
+
 		92A231602BBA9EF2001F53D6 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 92A2315F2BBA9EF2001F53D6 /* SDWebImage */; };
 		92A231632BBAA34E001F53D6 /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 92A231622BBAA34E001F53D6 /* SDWebImageWebPCoder */; };
+
 		92AC7B9D2B7381600063D7D9 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AC7B9C2B7381600063D7D9 /* TimerView.swift */; };
 		92AC7B9F2B738F6E0063D7D9 /* ExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AC7B9E2B738F6E0063D7D9 /* ExerciseController.swift */; };
 /* End PBXBuildFile section */
@@ -47,6 +51,7 @@
 		922C5CF42B5BF5C600EF2975 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		922C5CF62B5BF61D00EF2975 /* Json.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Json.swift; sourceTree = "<group>"; };
 		923D5F822B88E24B00F699DB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		92A2315C2BB816C6001F53D6 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		92AC7B9C2B7381600063D7D9 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		92AC7B9E2B738F6E0063D7D9 /* ExerciseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -144,6 +149,7 @@
 			children = (
 				922C5CF42B5BF5C600EF2975 /* Data.swift */,
 				922C5CF62B5BF61D00EF2975 /* Json.swift */,
+				92A2315C2BB816C6001F53D6 /* StorageManager.swift */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -246,6 +252,7 @@
 				922C5CF12B5BF41500EF2975 /* ProgramCell.swift in Sources */,
 				922C5CF72B5BF61D00EF2975 /* Json.swift in Sources */,
 				9201364E2B5FE65B00BC04D8 /* ImageCell.swift in Sources */,
+				92A2315D2BB816C6001F53D6 /* StorageManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

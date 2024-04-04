@@ -18,6 +18,7 @@ final class ProgramViewController: UIViewController {
   private var searchText: String?
   private var favoritePrograms:[String] = []
   private var isShowingFavorites: Bool = false
+  private let storage: StorageManagerProtocol = StorageManager()
   
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.createLayout())
@@ -34,7 +35,8 @@ final class ProgramViewController: UIViewController {
   private lazy var dataSource: ProgramListDataSource = {
     let dataSource = ProgramListDataSource (collectionView: collectionView, cellProvider: { collectionView, indexPath, program in
       guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
-      cell.setupProgramCell(programCell: program)
+      let isFavorite = self.favoritePrograms.contains(program.name)
+      cell.setupProgramCell(programCell: program, isFavorite: isFavorite)
       cell.favoriteButtonAction = {
         self.toggleFavorite(program: program)
       }
@@ -59,6 +61,7 @@ final class ProgramViewController: UIViewController {
     configureFavoriteButton()
     configureSearchBar()
     configureCollectionView()
+    loadFavoritePrograms()
     refreshData()
   }
   
@@ -172,9 +175,10 @@ extension ProgramViewController {
   private func toggleFavorite(program: Program) {
     if favoritePrograms.contains(program.name) {
       favoritePrograms.removeAll{$0 == program.name}
-    }else{
+    } else {
       favoritePrograms.append(program.name)
     }
+    saveFavoritePrograms()
     applySnapshot()
   }
   
@@ -203,5 +207,15 @@ extension ProgramViewController: UICollectionViewDelegate {
   private func deleteProgram(at index: Int) {
     welcome?.programs.remove(at: index)
     applySnapshot()
+  }
+}
+
+extension ProgramViewController {
+  private func saveFavoritePrograms() {
+    storage.set(favoritePrograms, forKey: .favoritePrograms)
+  }
+  
+  private func loadFavoritePrograms() {
+    favoritePrograms = storage.array(forKey: .favoritePrograms)  ?? []
   }
 }
