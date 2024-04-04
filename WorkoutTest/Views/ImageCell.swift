@@ -31,6 +31,6 @@ class ImageCell: UITableViewCell {
   }
   
   func setupImageCell(with imageName: String) {
-    myImageView.image = UIImage(named: imageName)
+    myImageView.sd_setImage(with: URL(string:"https://www.dropbox.com/scl/fi/a4958tbqpaakffnllcp11/plank.gif?rlkey=kp0ik4ad9t5mj993v694rr0lm&dl=1"), placeholderImage: UIImage(named: "plank"))
   }
 }

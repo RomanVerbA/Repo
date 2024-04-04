@@ -32,7 +32,7 @@ class ExerciseController: UIViewController {
   private let myImage: UIImageView = {
     var myImage = UIImageView()
     myImage.backgroundColor = .white
-    myImage.image = UIImage(named: "1")
+    myImage.sd_setImage(with: URL(string: "https://www.dropbox.com/scl/fi/qf7g88xlk3cgqxrcrdi2t/push-up.gif?rlkey=vcwis3o94mwg1t4gzpv6btxqg&dl=1"), placeholderImage: UIImage(named: "push-up"))
     return myImage
   }()
   
