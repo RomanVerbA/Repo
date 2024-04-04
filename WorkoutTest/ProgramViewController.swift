@@ -216,8 +216,6 @@ extension ProgramViewController {
   }
   
   private func loadFavoritePrograms() {
-    if let savedFavorites = storage.array(forKey: .favoritePrograms) {
-      favoritePrograms = savedFavorites
-    }
+    favoritePrograms = storage.array(forKey: .favoritePrograms)  ?? []
   }
 }
