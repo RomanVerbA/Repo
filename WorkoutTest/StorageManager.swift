@@ -38,7 +38,7 @@ final class StorageManager {
   
 }
 
-// MARK: - StorageManagerProtovol
+// MARK: - StorageManagerProtocol
 
 extension StorageManager: StorageManagerProtocol {
   
