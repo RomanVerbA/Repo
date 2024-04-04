@@ -14,6 +14,7 @@ struct Welcome: Codable, Hashable {
 
 // MARK: - Program
 struct Program: Codable, Hashable {
+  let id: Int
   let difficulty: Int
   let name, descriptionText, programType: String
   let days: [Day]
