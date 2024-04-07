@@ -17,6 +17,7 @@ protocol StorageManagerProtocol {
   func date(forKey key: StorageManager.Keys) -> Date?
   func bool(forKey key: StorageManager.Keys) -> Bool?
   func data(forKey key: StorageManager.Keys) -> Data?
+  func array(forKey key: StorageManager.Keys) -> [Int]?
   func codableData<T: Decodable>(forKey key: StorageManager.Keys) -> T?
   
 }
@@ -41,6 +42,10 @@ final class StorageManager {
 // MARK: - StorageManagerProtocol
 
 extension StorageManager: StorageManagerProtocol {
+  
+  func set(array: [Int], forKey key: Keys) {
+    store(array, key: key.rawValue)
+  }
   
   func set(_ object: Any?, forKey key: Keys) {
     store(object, key: key.rawValue)
@@ -87,12 +92,16 @@ extension StorageManager: StorageManagerProtocol {
     restore(forKey: key.rawValue) as? Data
   }
   
+  func array(forKey key: Keys) -> [Int]? {
+    restore(forKey: key.rawValue) as? [Int]
+  }
+  
   func codableData<T: Decodable>(forKey key: Keys) -> T? {
     guard let data = restore(forKey: key.rawValue) as? Data else { return nil }
     return try? JSONDecoder().decode(T.self, from: data)
   }
   
-  func remove(forKay key: Keys) {
+  func remove(forKey key: Keys) {
     userDefaults.removeObject(forKey: key.rawValue)
   }
 }

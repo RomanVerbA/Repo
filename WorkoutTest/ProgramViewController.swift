@@ -16,7 +16,7 @@ final class ProgramViewController: UIViewController {
   }
   
   private var searchText: String?
-  private var favoritePrograms:[String] = []
+  private var favoritePrograms:[Int] = []
   private var isShowingFavorites: Bool = false
   private let storage: StorageManagerProtocol = StorageManager()
   
@@ -35,10 +35,10 @@ final class ProgramViewController: UIViewController {
   private lazy var dataSource: ProgramListDataSource = {
     let dataSource = ProgramListDataSource (collectionView: collectionView, cellProvider: { collectionView, indexPath, program in
       guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProgramCell", for: indexPath) as? ProgramCell else { fatalError() }
-      let isFavorite = self.favoritePrograms.contains(program.name)
+      let isFavorite = self.favoritePrograms.contains(program.id)
       cell.setupProgramCell(programCell: program, isFavorite: isFavorite)
       cell.favoriteButtonAction = {
-        self.toggleFavorite(program: program)
+        self.toggleFavorite(programId: program.id)
       }
       return cell
     })
@@ -125,7 +125,7 @@ extension ProgramViewController {
     }
     
     if isShowingFavorites {
-      data = data.filter { program in favoritePrograms.contains(program.name) }
+      data = data.filter { program in favoritePrograms.contains(program.id) }
     }
     
     var snapshot = NSDiffableDataSourceSnapshot<ProgramListSection, Program>()
@@ -172,11 +172,11 @@ extension ProgramViewController: UISearchBarDelegate {
 //MARK: - Favorites
 
 extension ProgramViewController {
-  private func toggleFavorite(program: Program) {
-    if favoritePrograms.contains(program.name) {
-      favoritePrograms.removeAll{$0 == program.name}
+  private func toggleFavorite(programId: Int) {
+    if favoritePrograms.contains(programId) {
+      favoritePrograms.removeAll{$0 == programId}
     } else {
-      favoritePrograms.append(program.name)
+      favoritePrograms.append(programId)
     }
     saveFavoritePrograms()
     applySnapshot()
@@ -216,6 +216,6 @@ extension ProgramViewController {
   }
   
   private func loadFavoritePrograms() {
-    favoritePrograms = storage.array(forKey: .favoritePrograms)  ?? []
+    favoritePrograms = storage.array(forKey: .favoritePrograms) ?? []
   }
 }
